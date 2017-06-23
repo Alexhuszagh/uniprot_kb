@@ -22,6 +22,8 @@ os:
 
 addons:
   apt:
+    apt_packages:
+      - swig
     sources:
       - llvm-toolchain-precise-3.9
       - ubuntu-toolchain-r-test

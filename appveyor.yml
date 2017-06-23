@@ -18,6 +18,7 @@ init: []
 
 install:
   - git submodule update --init --recursive
+  - choco install -y swig
 
 build_script:
   - python setup.py build
