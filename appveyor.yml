@@ -9,6 +9,14 @@ environment:
   - additional_flags: ""
   - additional_flags: "/std:c++latest"
 
+  - PYTHON: "C:\\Python34"
+    PYTHON_VERSION: "3.4.x" # currently 3.4.3
+    PYTHON_ARCH: "32"
+
+  - PYTHON: "C:\\Python34-x64"
+    PYTHON_VERSION: "3.4.x" # currently 3.4.3
+    PYTHON_ARCH: "64"
+
 matrix:
   exclude:
     - additional_flags: "/std:c++latest"
@@ -19,6 +27,7 @@ init: []
 install:
   - git submodule update --init --recursive
   - choco install -y swig
+  - python --version
 
 build_script:
   - python setup.py build_ext

@@ -22,8 +22,6 @@ os:
 
 addons:
   apt:
-    apt_packages:
-      - swig
     sources:
       - llvm-toolchain-precise-3.9
       - ubuntu-toolchain-r-test
@@ -31,6 +29,7 @@ addons:
       - clang-3.9
       - g++-6
       - gcc-6
+      - swig
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                                           ; fi
