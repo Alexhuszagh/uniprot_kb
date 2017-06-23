@@ -1,0 +1,13 @@
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Compiled
+*.o
+*.so
+*.dll
+*.exe
+*.a
+*.lib
+*.pyc
