@@ -25,6 +25,7 @@ os:
 addons:
   apt:
     sources:
+      - trusty-backports
       - llvm-toolchain-precise-3.9
       - ubuntu-toolchain-r-test
     packages:
