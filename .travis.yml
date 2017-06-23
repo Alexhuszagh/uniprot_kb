@@ -25,16 +25,20 @@ os:
 addons:
   apt:
     sources:
-      - trusty-backports
       - llvm-toolchain-precise-3.9
       - ubuntu-toolchain-r-test
     packages:
       - clang-3.9
       - g++-6
       - gcc-6
-      - swig3.0
 
 before_install:
+  # LINUX
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install swig3.0; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo ln -s /usr/bin/swig3.0 /usr/bin/swig; fi
+
+  # OSX
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                                           ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install swig                                                     ; fi
   - if [ "$CXX" = "g++" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc                                ; fi
