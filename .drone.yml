@@ -10,6 +10,8 @@ build:
     - wget https://bootstrap.pypa.io/get-pip.py
     - python get-pip.py
     - python -m pip install setuptools
+    - python setup.py build_ext
+    - python setup.py build
     - python setup.py test
 
 matrix:

@@ -21,6 +21,7 @@ install:
   - choco install -y swig
 
 build_script:
+  - python setup.py build_ext
   - python setup.py build
 
 test_script:

@@ -34,6 +34,7 @@ addons:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                                           ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install swig                                                     ; fi
   - if [ "$CXX" = "g++" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc                                ; fi
   - if [ "$CXX" = "clang++" ] &&[[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH="/usr/local/opt/llvm/bin:$PATH"  ; fi
   - if [ "$CXX" = "clang++" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install llvm                           ; fi
@@ -44,4 +45,6 @@ install:
   - if [ "$CXX" = "clang++" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX="clang++-3.9" CC="clang-3.9"; fi
 
 script:
+  - python setup.py build_ext
+  - python setup.py build
   - python setup.py test
