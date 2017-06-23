@@ -6,9 +6,6 @@ os:
 
 environment:
   matrix:
-  - additional_flags: ""
-  - additional_flags: "/std:c++latest"
-
   - PYTHON: "C:\\Python34"
     PYTHON_VERSION: "3.4.x" # currently 3.4.3
     PYTHON_ARCH: "32"
@@ -17,16 +14,12 @@ environment:
     PYTHON_VERSION: "3.4.x" # currently 3.4.3
     PYTHON_ARCH: "64"
 
-matrix:
-  exclude:
-    - additional_flags: "/std:c++latest"
-      os: Visual Studio 2015
-
 init: []
 
 install:
   - git submodule update --init --recursive
   - choco install -y swig
+  - SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
   - python --version
 
 build_script:
