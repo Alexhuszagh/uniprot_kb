@@ -18,12 +18,6 @@ os:
   - linux
   - osx
 
-matrix:
-  allow_failures:
-    # WARNING: Temporarily disabled Linux builds, due to an unknown segfault
-    # during test execution. Temporarily restore this.
-    - os: linux
-
 addons:
   apt:
     sources:
