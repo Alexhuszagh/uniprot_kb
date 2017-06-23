@@ -55,6 +55,5 @@ install:
 script:
   - swig -version
   - python --version
-  - python setup.py build_ext
   - python setup.py build
   - python setup.py test
