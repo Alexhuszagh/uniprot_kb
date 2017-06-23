@@ -12,6 +12,7 @@ build:
     - python --version
     - python setup.py build_ext
     - python setup.py build
+    - python setup.py install --user
     - ls uniprot_kb
     - ls build/*/uniprot_kb
     - python setup.py test

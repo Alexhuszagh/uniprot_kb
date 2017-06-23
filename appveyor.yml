@@ -32,6 +32,7 @@ install:
 build_script:
   - python setup.py build_ext
   - python setup.py build
+  - python setup.py install --user
 
 test_script:
   - python setup.py test
