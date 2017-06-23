@@ -12,6 +12,8 @@ notifications:
     on_cancel: never
     on_error: never
 
+dist: trusty
+
 compiler:
   - clang
   - gcc
@@ -29,7 +31,7 @@ addons:
       - clang-3.9
       - g++-6
       - gcc-6
-      - swig
+      - swig3.0
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update                                                           ; fi

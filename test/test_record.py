@@ -10,6 +10,7 @@
 import os
 print(os.getcwd())
 print(os.listdir(os.getcwd()))
+print(os.listdir(os.path.join(os.getcwd(), "uniprot_kb")))
 
 import copy
 import unittest
