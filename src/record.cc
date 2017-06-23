@@ -10,7 +10,7 @@
 // ---------
 
 
-decltype(auto) tie(const UniprotRecord &r)
+decltype(auto) tie(const UniProtRecord &r)
 {
     return std::tie(
         r.sequence_version,
@@ -33,13 +33,13 @@ decltype(auto) tie(const UniprotRecord &r)
 // -------
 
 
-bool UniprotRecord::operator==(const UniprotRecord &other) const
+bool UniProtRecord::operator==(const UniProtRecord &other) const
 {
     return tie(*this) == tie(other);
 }
 
 
-bool UniprotRecord::operator<(const UniprotRecord &other) const
+bool UniProtRecord::operator<(const UniProtRecord &other) const
 {
     return std::tie(length, mass) < std::tie(other.length, other.mass);
 }

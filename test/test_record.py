@@ -15,11 +15,11 @@ import uniprot_kb
 # -----
 
 
-class UniprotRecordTest(unittest.TestCase):
+class UniProtRecordTest(unittest.TestCase):
     '''Test record object definition'''
 
     def setUp(self):
-        self.record = uniprot_kb.UniprotRecord(3,
+        self.record = uniprot_kb.UniProtRecord(3,
             1,
             35780,
             333,
@@ -46,7 +46,7 @@ class UniprotRecordTest(unittest.TestCase):
         self.assertEquals(self.record.taxonomy, "9986")
 
     def test_operators(self):
-        blank = uniprot_kb.UniprotRecord()
+        blank = uniprot_kb.UniProtRecord()
         cpy = copy.copy(self.record)
 
         self.assertNotEquals(self.record, blank)
@@ -83,12 +83,14 @@ class UniprotRecordTest(unittest.TestCase):
         # XML
 
 
-class UniprotRecordListTest(unittest.TestCase):
+class UniProtRecordListTest(unittest.TestCase):
     '''Test record object definition'''
 
     def setUp(self):
-        self.list = uniprot_kb.UniprotRecordList()
-        self.list.append(uniprot_kb.UniprotRecord(3,
+        self.list = uniprot_kb.UniProtRecordList()
+
+        # GAPDH
+        self.list.append(uniprot_kb.UniProtRecord(3,
             1,
             35780,
             333,
@@ -101,11 +103,28 @@ class UniprotRecordListTest(unittest.TestCase):
             "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKAENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIISAPSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAITATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSVVDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIALNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE",
             "9986"))
 
+        # BSA
+        self.list.append(uniprot_kb.UniProtRecord(4,
+            1,
+            69293,
+            607,
+            "ALB",
+            "P02769",
+            "ALBU_BOVIN",
+            "Serum albumin",
+            "Bos taurus",
+            "UP000009136",
+            "MKWVTFISLLLLFSSAYSRGVFRRDTHKSEIAHRFKDLGEEHFKGLVLIAFSQYLQQCPFDEHVKLVNELTEFAKTCVADESHAGCEKSLHTLFGDELCKVASLRETYGDMADCCEKQEPERNECFLSHKDDSPDLPKLKPDPNTLCDEFKADEKKFWGKYLYEIARRHPYFYAPELLYYANKYNGVFQECCQAEDKGACLLPKIETMREKVLASSARQRLRCASIQKFGERALKAWSVARLSQKFPKAEFVEVTKLVTDLTKVHKECCHGDLLECADDRADLAKYICDNQDTISSKLKECCDKPLLEKSHCIAEVEKDAIPENLPPLTADFAEDKDVCKNYQEAKDAFLGSFLYEYSRRHPEYAVSVLLRLAKEYEATLEECCAKDDPHACYSTVFDKLKHLVDEPQNLIKQNCDQFEKLGEYGFQNALIVRYTRKVPQVSTPTLVEVSRSLGKVGTRCCTKPESERMPCTEDYLSLILNRLCVLHEKTPVSEKVTKCCTESLVNRRPCFSALTPDETYVPKAFDEKLFTFHADICTLPDTEKQIKKQTALVELLKHKPKATEEQLKTVMENFVAFVDKCCAADDKEACFAVEGPKLVVSTQTALA",
+            "9913"))
+
     def test_to_string(self):
         # TEXT
 
         # FASTA
-        pass
+        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
+        self.assertEquals(len(data), 21)
+        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
+        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
 
         # XML
 

@@ -19,46 +19,46 @@
 /**
  *  \brief Serialize single UniProt record to XML.
  */
-std::string& to_xml(std::string& str, const UniprotRecord& record);
+std::string& to_xml(std::string& str, const UniProtRecord& record);
 
 
 /**
  *  \brief Serialize UniProt record list to XML.
  */
-std::string& to_xml(std::string& str, const UniprotRecordList& list);
+std::string& to_xml(std::string& str, const UniProtRecordList& list);
 
 
 /**
  *  \brief Serialize single UniProt record to XML.
  */
-std::ostream& to_xml(std::ostream& stream, const UniprotRecord& record);
+std::ostream& to_xml(std::ostream& stream, const UniProtRecord& record);
 
 
 /**
  *  \brief Serialize UniProt record list to XML.
  */
-std::ostream& to_xml(std::ostream& stream, const UniprotRecordList& list);
+std::ostream& to_xml(std::ostream& stream, const UniProtRecordList& list);
 
 
 /**
  *  \brief Load XML to UniProt record.
  */
-UniprotRecord& load_xml(UniprotRecord& record, const std::string& str);
+UniProtRecord& load_xml(UniProtRecord& record, const std::string& str);
 
 
 /**
  *  \brief Load XML to UniProt record list.
  */
-UniprotRecordList& load_xml(UniprotRecordList& list, const std::string& str);
+UniProtRecordList& load_xml(UniProtRecordList& list, const std::string& str);
 
 
 /**
  *  \brief Load XML to UniProt record.
  */
-UniprotRecord& load_xml(UniprotRecord& record, std::istream& stream);
+UniProtRecord& load_xml(UniProtRecord& record, std::istream& stream);
 
 
 /**
  *  \brief Load XML to UniProt record list.
  */
-UniprotRecordList& load_xml(UniprotRecordList& list, std::istream& stream);
+UniProtRecordList& load_xml(UniProtRecordList& list, std::istream& stream);

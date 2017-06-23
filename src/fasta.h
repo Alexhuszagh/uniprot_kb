@@ -19,46 +19,46 @@
 /**
  *  \brief Serialize UniProt record to FASTA.
  */
-std::string& to_fasta(std::string& str, const UniprotRecord& record);
+std::string& to_fasta(std::string& str, const UniProtRecord& record);
 
 
 /**
  *  \brief Serialize UniProt record list to FASTA.
  */
-std::string& to_fasta(std::string& str, const UniprotRecordList& list);
+std::string& to_fasta(std::string& str, const UniProtRecordList& list);
 
 
 /**
  *  \brief Serialize UniProt record to FASTA.
  */
-std::ostream& to_fasta(std::ostream& stream, const UniprotRecord& record);
+std::ostream& to_fasta(std::ostream& stream, const UniProtRecord& record);
 
 
 /**
  *  \brief Serialize UniProt record list to FASTA.
  */
-std::ostream& to_fasta(std::ostream& stream, const UniprotRecordList& list);
+std::ostream& to_fasta(std::ostream& stream, const UniProtRecordList& list);
 
 
 /**
  *  \brief Load FASTA to UniProt record.
  */
-UniprotRecord& load_fasta(UniprotRecord& record, const std::string& str);
+UniProtRecord& load_fasta(UniProtRecord& record, const std::string& str);
 
 
 /**
  *  \brief Load FASTA to UniProt record list.
  */
-UniprotRecordList& load_fasta(UniprotRecordList& list, const std::string& str);
+UniProtRecordList& load_fasta(UniProtRecordList& list, const std::string& str);
 
 
 /**
  *  \brief Load FASTA to UniProt record.
  */
-UniprotRecord& load_fasta(UniprotRecord& record, std::istream& stream);
+UniProtRecord& load_fasta(UniProtRecord& record, std::istream& stream);
 
 
 /**
  *  \brief Load FASTA to UniProt record list.
  */
-UniprotRecordList& load_fasta(UniprotRecordList& list, std::istream& stream);
+UniProtRecordList& load_fasta(UniProtRecordList& list, std::istream& stream);

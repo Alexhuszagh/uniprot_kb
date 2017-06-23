@@ -10,7 +10,7 @@
 // ---------
 
 
-std::string& to_xml(std::string& str, const UniprotRecord& record)
+std::string& to_xml(std::string& str, const UniProtRecord& record)
 {
     std::ostringstream stream;
     to_xml(stream, record);
@@ -20,7 +20,7 @@ std::string& to_xml(std::string& str, const UniprotRecord& record)
 }
 
 
-std::string& to_xml(std::string& str, const UniprotRecordList& list)
+std::string& to_xml(std::string& str, const UniProtRecordList& list)
 {
     std::ostringstream stream;
     to_xml(stream, list);
@@ -30,42 +30,42 @@ std::string& to_xml(std::string& str, const UniprotRecordList& list)
 }
 
 
-std::ostream& to_xml(std::ostream& stream, const UniprotRecord& record)
+std::ostream& to_xml(std::ostream& stream, const UniProtRecord& record)
 {
     // TODO: here...
     return stream;
 }
 
 
-std::ostream& to_xml(std::ostream& stream, const UniprotRecordList& list)
+std::ostream& to_xml(std::ostream& stream, const UniProtRecordList& list)
 {
     // TODO: here...
     return stream;
 }
 
 
-UniprotRecord& load_xml(UniprotRecord& record, const std::string& str)
+UniProtRecord& load_xml(UniProtRecord& record, const std::string& str)
 {
     std::istringstream stream(str);
     return load_xml(record, stream);
 }
 
 
-UniprotRecordList& load_xml(UniprotRecordList& list, const std::string& str)
+UniProtRecordList& load_xml(UniProtRecordList& list, const std::string& str)
 {
     std::istringstream stream(str);
     return load_xml(list, stream);
 }
 
 
-UniprotRecord& load_xml(UniprotRecord& record, std::istream& stream)
+UniProtRecord& load_xml(UniProtRecord& record, std::istream& stream)
 {
     // TODO: here...
     return record;
 }
 
 
-UniprotRecordList& load_xml(UniprotRecordList& list, std::istream& stream)
+UniProtRecordList& load_xml(UniProtRecordList& list, std::istream& stream)
 {
     // TODO: here...
     return list;

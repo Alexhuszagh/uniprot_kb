@@ -62,6 +62,7 @@ INCLUDE_DIRS = [
 SWIG_OPTS = [
     '-modern',
     '-Isrc',
+    '-Ithird_party/crosscxx/src',
     '-c++',
 # -builtin causes relative import errors, since it
 # conflicts with -relativeimport
