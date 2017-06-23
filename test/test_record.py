@@ -6,12 +6,6 @@
     ------
 '''
 
-# TODO: remove
-import os
-print(os.getcwd())
-print(os.listdir(os.getcwd()))
-print(os.listdir(os.path.join(os.getcwd(), "uniprot_kb")))
-
 import copy
 import unittest
 import uniprot_kb
@@ -94,18 +88,18 @@ class UniprotRecordListTest(unittest.TestCase):
 
     def setUp(self):
         self.list = uniprot_kb.UniprotRecordList()
-#        self.list.append(uniprot_kb.UniprotRecord(3,
-#            1,
-#            35780,
-#            333,
-#            "GAPDH",
-#            "P46406",
-#            "G3P_RABIT",
-#            "Glyceraldehyde-3-phosphate dehydrogenase",
-#            "Oryctolagus cuniculus",
-#            "UP000001811",
-#            "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKAENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIISAPSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAITATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSVVDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIALNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE",
-#            "9986"))
+        self.list.append(uniprot_kb.UniprotRecord(3,
+            1,
+            35780,
+            333,
+            "GAPDH",
+            "P46406",
+            "G3P_RABIT",
+            "Glyceraldehyde-3-phosphate dehydrogenase",
+            "Oryctolagus cuniculus",
+            "UP000001811",
+            "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKAENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIISAPSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAITATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSVVDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIALNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE",
+            "9986"))
 
     def test_to_string(self):
         # TEXT

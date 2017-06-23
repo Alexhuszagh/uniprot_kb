@@ -1,7 +1,3 @@
-# WARNING: Temporarily disabled.
-# Disable all builds, since Tea-CI provides better integration
-# with MinGW.
-
 language: cpp
 notifications:
   email:
@@ -21,6 +17,12 @@ compiler:
 os:
   - linux
   - osx
+
+matrix:
+  allow_failures:
+    # WARNING: Temporarily disabled Linux builds, due to an unknown segfault
+    # during test execution. Temporarily restore this.
+    - os: linux
 
 addons:
   apt:
@@ -52,6 +54,7 @@ install:
 
 script:
   - swig -version
+  - python --version
   - python setup.py build_ext
   - python setup.py build
   - python setup.py test
