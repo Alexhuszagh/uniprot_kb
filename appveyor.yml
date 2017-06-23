@@ -19,7 +19,8 @@ init: []
 install:
   - git submodule update --init --recursive
 
-build_script: []
+build_script:
+  - python setup.py build
 
 test_script:
   - python setup.py test
