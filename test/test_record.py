@@ -6,6 +6,11 @@
     ------
 '''
 
+# TODO: remove
+import os
+print(os.getcwd())
+print(os.listdir(os.getcwd()))
+
 import copy
 import unittest
 import uniprot_kb
