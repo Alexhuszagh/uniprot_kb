@@ -59,6 +59,15 @@ INCLUDE_DIRS = [
     'third_party/lattice/include',
     'third_party/crosscxx/src',
 ]
+SWIG_OPTS = [
+    '-modern',
+    '-Isrc',
+    '-c++',
+# -builtin causes relative import errors, since it
+# conflicts with -relativeimport
+#    '-builtin',
+    '-relativeimport'
+]
 
 # PACKAGING
 # ---------
@@ -73,7 +82,7 @@ def pack_extensions(names):
         py_modules.append("uniprot_kb.{}".format(module))
         extension = Extension("uniprot_kb._{}".format(module),
             sources=sources,
-            swig_opts=['-modern', '-Isrc', '-c++', '-builtin'],
+            swig_opts=SWIG_OPTS,
             include_dirs=INCLUDE_DIRS,
             language='c++')
         extensions.append(extension)
@@ -97,7 +106,7 @@ EXTENSIONS, PY_MODULES = pack_extensions(EXTENSION_NAMES)
 # --------
 
 MSVC_EXTRA_COMPILE_ARGS = ['/EHsc', '/std:c++14', '/bigobj']
-MINGW_EXTRA_COMPILE_ARGS = ['-static-libgcc', '-static-libstdc++', '-std=c++14']
+MINGW_EXTRA_COMPILE_ARGS = ['-static-libgcc', '-static-libstdc++', '-std=c++14', '-fpermissive']
 CXX_EXTRA_COMPILE_ARGS = ['-std=c++14']
 
 

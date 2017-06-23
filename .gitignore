@@ -11,6 +11,7 @@ dist/
 *.a
 *.lib
 *.pyc
+*.pyd
 
 # SWIG
 uniprot_kb/*.py

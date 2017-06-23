@@ -1,3 +1,8 @@
-# NOQA
+'''
+    uniprot_kb
+    ----------
 
-from record import *
+    Load external modules and definitions.
+'''
+
+from .record import *

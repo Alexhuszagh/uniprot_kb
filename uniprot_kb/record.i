@@ -1,7 +1,7 @@
 //  :copyright: (c) 2017 Alex Huszagh.
 //  :license: MIT, see LICENSE.md for more details.
 
-%module record
+%module(package="uniprot_kb") record
 %{
 #include "format.h"
 #include "record.h"
