@@ -70,6 +70,8 @@ SWIG_OPTS = [
     '-relativeimport'
 ]
 
+FUNCXX_SOURCES = glob.glob('third_party/funxx/src/*.cc')
+
 # PACKAGING
 # ---------
 
@@ -97,8 +99,7 @@ EXTENSION_NAMES = [
          'src/record.cc',
          'src/fasta.cc',
          'src/xml.cc',
-         'src/txt.cc',
-         'third_party/funxx/src/getline.cc'],
+         'src/txt.cc'] + FUNCXX_SOURCES,
         []),
 ]
 EXTENSIONS, PY_MODULES = pack_extensions(EXTENSION_NAMES)

@@ -11,7 +11,7 @@
 #include "txt.h"
 #include "xml.h"
 
-#include <fstream>
+#include <fstream.h>
 
 // ENUMS
 // -----
@@ -60,8 +60,7 @@ T from_string(const std::string& str, format fmt)
 template <typename T>
 void to_file(const T& t, const std::string& path, format fmt)
 {
-    // TODO: need to use ofstream from crosscxx
-    std::ofstream stream(path, std::ios_base::binary);
+    ofstream stream(path, std::ios_base::binary);
     switch (fmt) {
         case TEXT:      to_text(stream, t);     return;
         case FASTA:     to_fasta(stream, t);    return;
@@ -74,8 +73,7 @@ void to_file(const T& t, const std::string& path, format fmt)
 template <typename T>
 T from_file(const std::string& path, format fmt)
 {
-    // TODO: need to use ifstream from crosscxx
-    std::ifstream stream(path, std::ios_base::binary);
+    ifstream stream(path, std::ios_base::binary);
     T t;
     switch (fmt) {
         case TEXT:      return load_text(t, stream);
