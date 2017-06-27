@@ -60,6 +60,7 @@ T from_string(const std::string& str, format fmt)
 template <typename T>
 void to_file(const T& t, const std::string& path, format fmt)
 {
+    // TODO: need to use ofstream from crosscxx
     std::ofstream stream(path, std::ios_base::binary);
     switch (fmt) {
         case TEXT:      to_text(stream, t);     return;
@@ -73,6 +74,7 @@ void to_file(const T& t, const std::string& path, format fmt)
 template <typename T>
 T from_file(const std::string& path, format fmt)
 {
+    // TODO: need to use ifstream from crosscxx
     std::ifstream stream(path, std::ios_base::binary);
     T t;
     switch (fmt) {

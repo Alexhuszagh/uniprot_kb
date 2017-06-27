@@ -1,6 +1,6 @@
 [submodule "third_party/lattice"]
 	path = third_party/lattice
 	url = https://github.com/Alexhuszagh/lattice.git
-[submodule "third_party/crosscxx"]
-	path = third_party/crosscxx
-	url = https://github.com/Alexhuszagh/crosscxx.git
+[submodule "third_party/funxx"]
+	path = third_party/funxx
+	url = https://github.com/Alexhuszagh/funxx.git

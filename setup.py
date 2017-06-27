@@ -57,12 +57,12 @@ IS_WINDOWS = platform.system() == 'Windows'
 INCLUDE_DIRS = [
     'src',
     'third_party/lattice/include',
-    'third_party/crosscxx/src',
+    'third_party/funxx/src',
 ]
 SWIG_OPTS = [
     '-modern',
     '-Isrc',
-    '-Ithird_party/crosscxx/src',
+    '-Ithird_party/funxx/src',
     '-c++',
 # -builtin causes relative import errors, since it
 # conflicts with -relativeimport
@@ -98,7 +98,7 @@ EXTENSION_NAMES = [
          'src/fasta.cc',
          'src/xml.cc',
          'src/txt.cc',
-         'third_party/crosscxx/src/getline.cc'],
+         'third_party/funxx/src/getline.cc'],
         []),
 ]
 EXTENSIONS, PY_MODULES = pack_extensions(EXTENSION_NAMES)
