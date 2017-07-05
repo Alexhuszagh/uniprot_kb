@@ -70,7 +70,7 @@ SWIG_OPTS = [
     '-relativeimport'
 ]
 
-FUNCXX_SOURCES = glob.glob('third_party/funxx/src/*.cc')
+FUNCXX_SOURCES = glob.glob('third_party/funxx/src/**/*.cc')
 
 # PACKAGING
 # ---------
