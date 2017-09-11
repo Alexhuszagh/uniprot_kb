@@ -53,7 +53,7 @@ For POSIX systems, please use the system default Python, Git and Cython, which a
 #### Ubuntu/Debian
 
 ```bash
-sudo apt install python swig cython  # cython3 annd python3 for Python3.x
+sudo apt install python swig cython g++  # cython3 and python3 for Python3.x
 
 # configure and build
 cd uniprot_kb
@@ -67,8 +67,11 @@ python setup.py install --user
 
 #### Other
 
-Install Python (2 or 3, depending on which wrappers you would like to use), install any modern git, and with a modern Python install type:
+Install Python (2 or 3, depending on which wrappers you would like to use), install any modern git and C++ compiler, and with a modern Python install type:
 
 ```bash
+# install Cython
 python -m pip install cython
+
+
 ```

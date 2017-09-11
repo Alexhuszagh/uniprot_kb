@@ -38,7 +38,7 @@ A C++/Python Interface with UniProt KB.
 
 ## Building
 
-uniprot_kb requires Python, setuptools, and a C++ compiler environment for building.
+uniprot_kb requires Python, Git, Cython, and C++ compiler environment for building.
 
 ```bash
 git clone https://github.com/Alexhuszagh/uniprot_kb.git
@@ -47,6 +47,8 @@ python setup.py build
 python setup.py test            # run unittest suite
 python setup.py install --user  # install package locally
 ```
+
+See [building](/BUILDING.md) for more detailed instructions.
 
 ## Platforms
 
