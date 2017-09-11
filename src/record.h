@@ -10,6 +10,8 @@
 #include <deque>
 #include <string>
 
+namespace uniprot
+{
 // CONSTANTS
 // ---------
 
@@ -23,7 +25,7 @@ static constexpr size_t MNEMONIC_LENGTH = 11;
 /**
  *  \brief Model for a single record from a UniProt KB query.
  *
- *  UniProtRecord including core query fields for a given UniProt identifier.
+ *  Record including core query fields for a given UniProt identifier.
  *  The query fields are defined [here](http://www.uniprot.org/help/query-fields).
  *
  *  \param sequence_version Numerical identifier for protein version.
@@ -47,7 +49,7 @@ static constexpr size_t MNEMONIC_LENGTH = 11;
  *  transcript level, and 3 meaning the protein was inferred via
  *  homology.
  */
-struct UniProtRecord
+struct record
 {
     uint8_t sequence_version;
     uint8_t protein_evidence;
@@ -62,12 +64,14 @@ struct UniProtRecord
     std::string sequence;
     std::string taxonomy;
 
-    bool operator==(const UniProtRecord &other) const;
-    bool operator<(const UniProtRecord &other) const;
+    bool operator==(const record& other) const;
+    bool operator<(const record& other) const;
 };
 
 
 /**
  *  \brief Collection of uniprot records.
  */
-typedef std::deque<UniProtRecord> UniProtRecordList;
+typedef std::deque<record> record_list;
+
+}   /* uniprot */    

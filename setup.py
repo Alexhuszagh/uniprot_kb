@@ -56,53 +56,29 @@ IS_64BIT = sys.maxsize > 2**32
 IS_WINDOWS = platform.system() == 'Windows'
 INCLUDE_DIRS = [
     'src',
-    'third_party/lattice/include',
-    'third_party/funxx/src',
-]
-SWIG_OPTS = [
-    '-modern',
-    '-Isrc',
-    '-Ithird_party/funxx/src',
-    '-c++',
-# -builtin causes relative import errors, since it
-# conflicts with -relativeimport
-#    '-builtin',
-    '-relativeimport'
+    'third_party/pycpp'
 ]
 
-FUNCXX_SOURCES = glob.glob('third_party/funxx/src/**/*.cc')
+PYCPP_SOURCES = glob.glob('third_party/pycpp/**/*.cc')
 
 # PACKAGING
 # ---------
 
-
-def pack_extensions(names):
-    '''Pack extension names to Extension objects'''
-
-    extensions = []
-    py_modules = []
-    for module, sources, extras in names:
-        py_modules.append("uniprot_kb.{}".format(module))
-        extension = Extension("uniprot_kb._{}".format(module),
-            sources=sources,
-            swig_opts=SWIG_OPTS,
-            include_dirs=INCLUDE_DIRS,
-            language='c++')
-        extensions.append(extension)
-
-    return extensions, py_modules
-
-
+SRC_DIR = "uniprot_kb"
+PACKAGES = {SRC_DIR}
 EXTENSION_NAMES = [
-    ('record',
-        ['uniprot_kb/record.i',
-         'src/record.cc',
-         'src/fasta.cc',
-         'src/xml.cc',
-         'src/txt.cc'] + FUNCXX_SOURCES,
-        []),
+    ("record", [])
 ]
-EXTENSIONS, PY_MODULES = pack_extensions(EXTENSION_NAMES)
+
+EXTENSIONS = []
+for name, extras in EXTENSION_NAMES:
+    EXTENSIONS.append(Extension('uniprot_kb.name'.format(name),
+        sources=[
+            'uniprot_kb/{}.pyx'.format(name),
+            'src/{}.cc'.format(name),
+        ] + extras,
+        include_dirs=INCLUDE_DIRS,
+        language='c++'))
 
 # COMMANDS
 # --------
@@ -110,6 +86,68 @@ EXTENSIONS, PY_MODULES = pack_extensions(EXTENSION_NAMES)
 MSVC_EXTRA_COMPILE_ARGS = ['/EHsc', '/std:c++14', '/bigobj']
 MINGW_EXTRA_COMPILE_ARGS = ['-static-libgcc', '-static-libstdc++', '-std=c++14', '-fpermissive']
 CXX_EXTRA_COMPILE_ARGS = ['-std=c++14']
+
+
+class Clean(Command):
+    '''Custom clean command to remove Cython source files'''
+
+    description = "Test mslib"
+    user_options = []
+
+    def initialize_options(self):
+        '''Initialize and finalize no optional arguments'''
+
+    def finalize_options(self):
+        '''Initialize and finalize no optional arguments'''
+
+    def run(self):
+        '''Run clean suite'''
+
+        self.clean_build()
+        self.clean_dist()
+        self.clean_cython()
+
+    def clean_build(self):
+        '''Clean the build directory'''
+
+        home = os.path.dirname(os.path.realpath(__file__))
+        build = os.path.join(home, 'build')
+        if os.path.exists(build):
+            shutil.rmtree(build)
+
+    def clean_dist(self):
+        '''Clean the dist directory'''
+
+        home = os.path.dirname(os.path.realpath(__file__))
+        dist = os.path.join(home, 'dist')
+        if os.path.exists(dist):
+            shutil.rmtree(dist)
+
+    def clean_cython(self):
+        '''Clean intermediate Cython files'''
+
+        home = os.path.dirname(os.path.realpath(__file__))
+        for pattern in ['*.h', '*.c', '*.cpp']:
+            for file in glob.iglob(os.path.join(home, 'uniprot_kb', '*', pattern)):
+                os.remove(file)
+
+
+class Test(Command):
+    '''Test built libraries'''
+
+    description = "Test mslib"
+    user_options = []
+
+    def initialize_options(self):
+        '''Initialize and finalize no optional arguments'''
+
+    def finalize_options(self):
+        '''Initialize and finalize no optional arguments'''
+
+    def run(self):
+        '''Run test suite'''
+
+        #home = os.path.dirname(os.path.realpath(__file__))
 
 
 class BuildExt(build_ext):
@@ -128,69 +166,6 @@ class BuildExt(build_ext):
         build_ext.build_extension(self, ext)
 
 
-class Test(test):
-    '''Override test args to ensure unittests are discovered.'''
-
-    def _test_args(self):
-        yield 'discover'
-        for arg in test._test_args(self):
-            yield arg
-
-
-class Clean(Command):
-    '''Test built libraries'''
-
-    description = "Clean build objects"
-    user_options = []
-
-    def initialize_options(self):
-        '''Initialize and finalize no optional arguments'''
-
-    def finalize_options(self):
-        '''Initialize and finalize no optional arguments'''
-
-    def run(self):
-        '''Run test suite'''
-
-        self.clean_build()
-        self.clean_dist()
-        self.clean_swig()
-        self.clean_egg()
-
-    def clean_build(self):
-        '''Clean the build directory'''
-
-        home = os.path.dirname(os.path.realpath(__file__))
-        build = os.path.join(home, 'build')
-        if os.path.exists(build):
-            shutil.rmtree(build)
-
-    def clean_dist(self):
-        '''Clean the dist directory'''
-
-        home = os.path.dirname(os.path.realpath(__file__))
-        dist = os.path.join(home, 'dist')
-        if os.path.exists(dist):
-            shutil.rmtree(dist)
-
-    def clean_swig(self):
-        '''Clean SWIG intermediate files'''
-
-        home = os.path.dirname(os.path.realpath(__file__))
-        for pattern in ['*.h', '*.c', '*.cpp', '*.py']:
-            for file in glob.iglob(os.path.join(home, 'uniprot_kb', pattern)):
-                if not file.endswith('__init__.py'):
-                    os.remove(file)
-
-    def clean_egg(self):
-        '''Clean egg-info and egg packaging'''
-
-        home = os.path.dirname(os.path.realpath(__file__))
-        egg_info = os.path.join(home, '{}.egg-info'.format(NAME))
-        if os.path.exists(egg_info):
-            shutil.rmtree(egg_info)
-
-
 COMMANDS = {
     'build_ext': BuildExt,
     'test': Test,
@@ -203,7 +178,7 @@ COMMANDS = {
 
 setup(name="uniprot_kb",
     version="0.0.1",
-    packages=[NAME],
+    packages=sorted(PACKAGES),
     description=SHORT_DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     license="MIT",
@@ -211,6 +186,5 @@ setup(name="uniprot_kb",
     author_email="ahuszagh@gmail.com",
     url='https://github.com/Alexhuszagh/uniprot_kb',
     ext_modules=EXTENSIONS,
-    py_modules=PY_MODULES,
     cmdclass=COMMANDS,
 )

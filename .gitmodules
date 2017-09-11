@@ -1,6 +1,3 @@
-[submodule "third_party/lattice"]
-	path = third_party/lattice
-	url = https://github.com/Alexhuszagh/lattice.git
-[submodule "third_party/funxx"]
-	path = third_party/funxx
-	url = https://github.com/Alexhuszagh/funxx.git
+[submodule "third_party/pycpp"]
+	path = third_party/pycpp
+	url = https://github.com/Alexhuszagh/pycpp

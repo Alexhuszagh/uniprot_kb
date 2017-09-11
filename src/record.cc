@@ -6,11 +6,13 @@
 #include <tuple>
 
 
+namespace uniprot
+{
 // FUNCTIONS
 // ---------
 
 
-decltype(auto) tie(const UniProtRecord &r)
+decltype(auto) tie(const record& r)
 {
     return std::tie(
         r.sequence_version,
@@ -33,13 +35,15 @@ decltype(auto) tie(const UniProtRecord &r)
 // -------
 
 
-bool UniProtRecord::operator==(const UniProtRecord &other) const
+bool record::operator==(const record& other) const
 {
     return tie(*this) == tie(other);
 }
 
 
-bool UniProtRecord::operator<(const UniProtRecord &other) const
+bool record::operator<(const record& other) const
 {
     return std::tie(length, mass) < std::tie(other.length, other.mass);
 }
+
+}   /* uniprot */    
