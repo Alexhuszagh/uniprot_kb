@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include <deque>
 #include <string>
+#include <vector>           // TODO: change to deque when Cython issue #1867 is patched
 
 namespace uniprot
 {
@@ -72,6 +72,6 @@ struct record
 /**
  *  \brief Collection of uniprot records.
  */
-typedef std::deque<record> record_list;
+typedef std::vector<record> record_list;
 
 }   /* uniprot */    

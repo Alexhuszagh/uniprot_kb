@@ -3,9 +3,10 @@
 #  :license: MIT, see LICENSE.md for more details.
 
 cimport cython
+from cython.operator cimport dereference, preincrement
 from libc.stdint cimport *
 from libcpp.string cimport string
-from libcpp.deque cimport deque
+from libcpp.vector cimport vector
 from uniprot_kb.util.operator cimport *
 
 # DECLARATIONS
@@ -27,7 +28,7 @@ cdef extern from "record.h" nogil:
         string sequence;
         string taxonomy;
 
-    cdef cppclass _record_list "uniprot::record_list"(deque[_record]):
+    cdef cppclass _record_list "uniprot::record_list"(vector[_record]):
         pass
 
 
@@ -179,7 +180,7 @@ cdef class UniProtRecordList:
     '''Model for a collection of UniProt records.'''
 
     cdef _record_list c
-    cdef deque[_record].iterator it
+    cdef vector[_record].iterator it
 
     def __cinit__(UniProtRecordList self, iterable=None):
         self.it = self.c.end()
@@ -200,3 +201,98 @@ cdef class UniProtRecordList:
 
     def __len__(UniProtRecordList self):
         return self.c.size()
+
+#    def __contains__(UniProtRecordList self, UniProtRecord value):
+#        return container_contains(self.c, value.c)
+
+    def __add__(UniProtRecordList self, iterable):
+        l = self.__copy__()
+        l += iterable
+        return l
+
+    def __iadd__(UniProtRecordList self, iterable):
+        self.extend(iterable)
+        return self
+
+    def __radd__(UniProtRecordList self, iterable):
+        return self.__add__(iterable)
+
+    def __mul__(UniProtRecordList self, int count):
+        l = self.__copy__()
+        l *= count
+        return l
+
+    def __imul__(UniProtRecordList self, int count):
+        if count == 0:
+            self.clear()
+            return self
+
+        length = self.c.size()
+        for _ in range(count-1):
+            for index in range(length):
+                self.c.push_back(self.c[index])
+        return self
+
+    def __rmul__(UniProtRecordList self, int count):
+        return self.__mul__(count)
+
+    def __iter__(UniProtRecordList self):
+        self.it = self.c.begin()
+        return self
+
+    def __next__(UniProtRecordList self):
+        if self.it == self.c.end():
+            raise StopIteration()
+        value = copy_record(dereference(self.it))
+        preincrement(self.it)
+        return value
+
+    @cython.boundscheck(True)
+    @cython.wraparound(True)
+    def __getitem__(UniProtRecordList self, int index):
+        return copy_record(self.c.at(index))
+
+    @cython.boundscheck(True)
+    @cython.wraparound(True)
+    def __setitem__(UniProtRecordList self, int index, UniProtRecord value):
+        self.c[index] = value.c
+
+    @cython.boundscheck(True)
+    @cython.wraparound(True)
+    def __delitem__(UniProtRecordList self, int index):
+        self.c.erase(self.c.begin() + index);
+
+    def append(UniProtRecordList self, UniProtRecord value):
+        self.c.push_back(value.c)
+
+    def extend(UniProtRecordList self, iterable):
+        for value in iterable:
+            self.append(value)
+
+#    @cython.boundscheck(True)
+#    @cython.wraparound(True)
+#    def insert(UniProtRecordList self, int index, UniProtRecord value):
+#        insert_container(self.c, index, value.c)
+#
+#    def remove(UniProtRecordList self, UniProtRecord value):
+#        remove_container(dereference(self.ptr), dereference(value.ptr))
+#
+    def clear(UniProtRecordList self):
+        self.c.clear()
+
+    def pop(UniProtRecordList self):
+        if self.c.empty():
+            raise IndexError("pop from empty list")
+        self.c.pop_back()
+
+    def pop(UniProtRecordList self, int index):
+        del self[index]
+
+#    def index(UniProtRecordList self, UniProtRecord value):
+#        return index_container(self.c, dereference(value.ptr))
+#
+#    def count(UniProtRecordList self, UniProtRecord value):
+#        return count_container(self.c, dereference(value.ptr))
+#
+#    def reverse(UniProtRecordList self):
+#        reverse_container(self.c)
