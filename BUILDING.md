@@ -3,8 +3,6 @@ unniprot_kb
 
 Build instructions for uniprot_kb, including the core C++ libraries and the Python wrappers.
 
-**TODO**: Move from Swig to Cython
-
 **Table Of Contents**
 
 - [About](#about)
@@ -38,7 +36,7 @@ All are compatible with 32-bit or 64-bit builds.
 
 - [Python](https://www.python.org/)
 - [Git](https://git-scm.com/)
-- [Swig](http://swig.org/)
+- [Cython](http://cython.org/)
 
 ## Instructions
 
@@ -50,14 +48,12 @@ All are compatible with 32-bit or 64-bit builds.
 
 ### POSIX
 
-For POSIX systems, please use the system default Python, Git and Swig, which are the sole dependencies for this package.
+For POSIX systems, please use the system default Python, Git and Cython, which are the sole dependencies for this package.
 
 #### Ubuntu/Debian
 
-**Warning: Build instructions temporarily fails for the GUI version, since Debian/Ubuntu currently do not have libqt5charts5-dev. This should be fixed in the near [future](https://packages.debian.org/search?keywords=libqt5charts5).**
-
 ```bash
-sudo apt install python swig git
+sudo apt install python swig cython  # cython3 annd python3 for Python3.x
 
 # configure and build
 cd uniprot_kb
@@ -68,6 +64,11 @@ python setup.py install --user
 #### Fedora
 
 
+
 #### Other
 
-Install Python (2 or 3, depending on which wrappers you would like to use)
+Install Python (2 or 3, depending on which wrappers you would like to use), install any modern git, and with a modern Python install type:
+
+```bash
+python -m pip install cython
+```
