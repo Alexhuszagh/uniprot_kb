@@ -15,6 +15,7 @@ cdef extern from "util/container.h" nogil:
     void reverse_container[T](T& t) except +
     void insert_container[T, V](T& t, int index, const V& v) except +
     void remove_container[T, V](T& t, const V& v) except +
-    bint container_contains[T, V](const T& t, const V& v) except +
+    bint array_contains[T, V](const T& t, const V& v) except +
+    bint map_contains[T, V](const T& t, const V& v) except +
     int index_container[T, V](const T& t, const V& v) except +
     int count_container[T, V](const T& t, const V& v) except +

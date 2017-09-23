@@ -7,6 +7,7 @@ from cython.operator cimport dereference, preincrement
 from libc.stdint cimport *
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from uniprot_kb.util.container cimport *
 from uniprot_kb.util.operator cimport *
 
 # DECLARATIONS
@@ -193,8 +194,9 @@ cdef class UniProtRecordList:
 
     def __deepcopy__(UniProtRecordList self, memo):
         copy = UniProtRecordList()
-#        for item in self:
-#            copy.append(copy_record(item.c))
+        for item in self:
+            r = <UniProtRecord>(item)
+            copy.append(copy_record(r.c))
         return copy
 
     def __richcmp__(UniProtRecordList self, UniProtRecordList other, int op):
@@ -203,8 +205,8 @@ cdef class UniProtRecordList:
     def __len__(UniProtRecordList self):
         return self.c.size()
 
-#    def __contains__(UniProtRecordList self, UniProtRecord value):
-#        return container_contains(self.c, value.c)
+    def __contains__(UniProtRecordList self, UniProtRecord value):
+        return array_contains(self.c, value.c)
 
     def __add__(UniProtRecordList self, iterable):
         l = self.__copy__()
