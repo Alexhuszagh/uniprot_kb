@@ -13,10 +13,11 @@ import os
 import platform
 import shutil
 import sys
+import sysconfig
+import unittest
 
 from setuptools import Command, Extension, setup
 from setuptools.command.build_ext import build_ext
-from setuptools.command.test import test
 
 # SETTINGS
 # --------
@@ -64,17 +65,16 @@ PYCPP_SOURCES = glob.glob('third_party/pycpp/**/*.cc')
 # PACKAGING
 # ---------
 
-SRC_DIR = "uniprot_kb"
-PACKAGES = {SRC_DIR}
+PACKAGE_NAME = "uniprot_kb"
 EXTENSION_NAMES = [
     ("record", [])
 ]
 
 EXTENSIONS = []
 for name, extras in EXTENSION_NAMES:
-    EXTENSIONS.append(Extension('uniprot_kb.name'.format(name),
+    EXTENSIONS.append(Extension(name='{}.{}'.format(PACKAGE_NAME, name),
         sources=[
-            'uniprot_kb/{}.pyx'.format(name),
+            '{}/{}.pyx'.format(PACKAGE_NAME, name),
             'src/{}.cc'.format(name),
         ] + extras,
         include_dirs=INCLUDE_DIRS,
@@ -86,6 +86,14 @@ for name, extras in EXTENSION_NAMES:
 MSVC_EXTRA_COMPILE_ARGS = ['/EHsc', '/std:c++14', '/bigobj']
 MINGW_EXTRA_COMPILE_ARGS = ['-static-libgcc', '-static-libstdc++', '-std=c++14', '-fpermissive']
 CXX_EXTRA_COMPILE_ARGS = ['-std=c++14']
+
+
+def distutils_build_dir(name):
+    '''Get the distutils build directory'''
+
+    platform = sysconfig.get_platform()
+    version = sys.version_info
+    return "{0}.{1}-{2[0]}.{2[1]}".format(name, platform, version)
 
 
 class Clean(Command):
@@ -128,7 +136,7 @@ class Clean(Command):
 
         home = os.path.dirname(os.path.realpath(__file__))
         for pattern in ['*.h', '*.c', '*.cpp']:
-            for file in glob.iglob(os.path.join(home, 'uniprot_kb', '*', pattern)):
+            for file in glob.iglob(os.path.join(home, PACKAGE_NAME, pattern)):
                 os.remove(file)
 
 
@@ -147,7 +155,18 @@ class Test(Command):
     def run(self):
         '''Run test suite'''
 
-        #home = os.path.dirname(os.path.realpath(__file__))
+        # get directories for test suite
+        home = os.path.dirname(os.path.realpath(__file__))
+        lib = distutils_build_dir("lib")
+        directory = os.path.join(home, "build", lib)
+        if not os.path.isdir(directory):
+            print("Must build {} prior to testing.".format(PACKAGE_NAME))
+            sys.exit(1)
+
+        # run test suite
+        sys.path.insert(0, directory)
+        suite = unittest.TestLoader().discover(os.path.join(home, "test"))
+        unittest.TextTestRunner(verbosity=2).run(suite)
 
 
 class BuildExt(build_ext):
@@ -176,15 +195,15 @@ COMMANDS = {
 # SETUP
 # -----
 
-setup(name="uniprot_kb",
+setup(name=PACKAGE_NAME,
     version="0.0.1",
-    packages=sorted(PACKAGES),
+    packages=[PACKAGE_NAME],
     description=SHORT_DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     license="MIT",
     author="Alex Huszagh",
     author_email="ahuszagh@gmail.com",
-    url='https://github.com/Alexhuszagh/uniprot_kb',
+    url='https://github.com/Alexhuszagh/{}'.format(PACKAGE_NAME),
     ext_modules=EXTENSIONS,
     cmdclass=COMMANDS,
 )

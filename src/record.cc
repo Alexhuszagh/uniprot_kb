@@ -46,4 +46,4 @@ bool record::operator<(const record& other) const
     return std::tie(length, mass) < std::tie(other.length, other.mass);
 }
 
-}   /* uniprot */    
+}   /* uniprot */

@@ -89,6 +89,4 @@ Install Python (2 or 3, depending on which wrappers you would like to use), inst
 ```bash
 # install Cython
 python -m pip install cython
-
-
 ```

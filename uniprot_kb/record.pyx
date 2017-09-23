@@ -41,7 +41,7 @@ cdef class UniProtRecord:
 
     cdef _record c
 
-    def __cinit__(UniProtRecord self, 
+    def __cinit__(UniProtRecord self,
                   int sequence_version = 0,
                   int protein_evidence = 1,
                   float mass = 0,
@@ -171,6 +171,7 @@ cdef UniProtRecord copy_record(const _record& r):
         r.mnemonic,
         r.name,
         r.organism,
+        r.proteome,
         r.sequence,
         r.taxonomy
     )
