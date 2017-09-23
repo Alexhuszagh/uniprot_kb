@@ -53,17 +53,34 @@ For POSIX systems, please use the system default Python, Git and Cython, which a
 #### Ubuntu/Debian
 
 ```bash
-sudo apt install python swig cython g++  # cython3 and python3 for Python3.x
+sudo apt install python swig cython g++ git  # cython3 and python3 for Python3.x
+
+# fetch and update repository
+git clone https://github.com/Alexhuszagh/uniprot_kb
+cd uniprot_kb
+git submodule update --init --recursive
 
 # configure and build
-cd uniprot_kb
 python setup.py build
 python setup.py install --user
 ```
 
 #### Fedora
 
+These instructions are tested on Fedora 26, but likely work with recent Fedora OSes.
 
+```bash
+sudo dnf install python swig python-Cython gcc-c++ git  # python3-Cython and python3 for Python3.x
+
+# fetch and update repository
+git clone https://github.com/Alexhuszagh/uniprot_kb
+cd uniprot_kb
+git submodule update --init --recursive
+
+# configure and build
+python setup.py build
+python setup.py install --user
+```
 
 #### Other
 
