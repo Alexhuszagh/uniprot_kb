@@ -272,14 +272,14 @@ cdef class UniProtRecordList:
         for value in iterable:
             self.append(value)
 
-#    @cython.boundscheck(True)
-#    @cython.wraparound(True)
-#    def insert(UniProtRecordList self, int index, UniProtRecord value):
-#        insert_container(self.c, index, value.c)
-#
-#    def remove(UniProtRecordList self, UniProtRecord value):
-#        remove_container(dereference(self.ptr), dereference(value.ptr))
-#
+    @cython.boundscheck(True)
+    @cython.wraparound(True)
+    def insert(UniProtRecordList self, int index, UniProtRecord value):
+        array_insert(self.c, index, value.c)
+
+    def remove(UniProtRecordList self, UniProtRecord value):
+        array_remove(self.c, value.c)
+
     def clear(UniProtRecordList self):
         self.c.clear()
 
@@ -292,10 +292,10 @@ cdef class UniProtRecordList:
         del self[index]
 
 #    def index(UniProtRecordList self, UniProtRecord value):
-#        return index_container(self.c, dereference(value.ptr))
+#        return index_container(self.c, value.c)
 #
 #    def count(UniProtRecordList self, UniProtRecord value):
-#        return count_container(self.c, dereference(value.ptr))
-#
-#    def reverse(UniProtRecordList self):
-#        reverse_container(self.c)
+#        return count_container(self.c, value.c)
+
+    def reverse(UniProtRecordList self):
+        array_reverse(self.c)
