@@ -70,9 +70,9 @@ PACKAGE_NAME = "uniprot_kb"
 EXTENSIONS = [
     Extension(name=PACKAGE_NAME,
         sources=[
-            '{}/record.pyx'.format(PACKAGE_NAME),
-            'src/column.cc',
+            '{}/uniprot.pyx'.format(PACKAGE_NAME),
             'src/fasta.cc',
+            'src/format.cc',
             'src/record.cc',
         ],
         include_dirs=INCLUDE_DIRS,

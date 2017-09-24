@@ -1,8 +1,8 @@
 //  :copyright: (c) 2017 Alex Huszagh.
 //  :license: MIT, see LICENSE.md for more details.
 
-#include "column.h"
 #include "fasta.h"
+#include "format.h"
 #include <pycpp/string/whitespace.h>
 
 #include <sstream>
@@ -43,17 +43,6 @@ std::ostream& to_fasta(std::ostream& stream, const record& r)
            << " PE=" << formatter.fasta(r, column_protein_evidence)
            << " SV=" << formatter.fasta(r, column_sequence_version)
            << formatter.fasta(r, column_sequence);
-// TODO: remove....
-//    stream << ">sp|" << record.id << "|" << record.mnemonic
-//           << " " << record.name << " OS=" << record.organism
-//           << " GN=" << record.gene << " PE="
-//           << (int) record.protein_evidence << " SV="
-//           << (int) record.sequence_version << NEWLINE;
-//
-//    for (size_t i = 0; i < ceildiv(record.sequence.length(), LENGTH); ++i) {
-//        size_t start = i * LENGTH;
-//        stream << record.sequence.substr(start, LENGTH) << NEWLINE;
-//    }
 
     return stream;
 }

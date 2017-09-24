@@ -3,13 +3,22 @@
 
 cimport cython
 from cython.operator cimport dereference, preincrement
-from uniprot_kb.fasta cimport *
+from uniprot_kb.format cimport *
+from uniprot_kb.record cimport *
 from uniprot_kb.util.container cimport *
 from uniprot_kb.util.operator cimport *
 
 # PYTHON
 # ------
 
+# FORMAT
+
+cpdef enum Format:
+    txt = 0
+    fasta = 1
+    xml = 2
+
+# RECORD
 
 cdef class UniProtRecord:
     '''Model for a single record from a UniProt KB query.'''
@@ -173,9 +182,12 @@ cdef class UniProtRecord:
     # SERIALIZATION
     # -------------
 
-    # TODO: fasta
-    # TODO: text
-    # TODO: xml
+    cpdef to_string(UniProtRecord self, Format fmt):
+        return _record_to_string(dereference(self.p), int(fmt))
+
+    cpdef to_file(UniProtRecord self, Format fmt, string path):
+        # TODO: to_file
+        pass
 
 
 cdef UniProtRecord copy_record(const shared_ptr[_record]& r):
@@ -318,6 +330,16 @@ cdef class UniProtRecordList:
 
     cpdef reverse(UniProtRecordList self):
         array_reverse(self.c)
+
+    # SERIALIZATION
+    # -------------
+
+    cpdef to_string(UniProtRecordList self, Format fmt):
+        return _list_to_string(self.c, int(fmt))
+
+    cpdef to_file(UniProtRecordList self, Format fmt, string path):
+        # TODO: to_file
+        pass
 
     # PRIVATE
     # -------

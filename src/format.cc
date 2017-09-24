@@ -1,7 +1,7 @@
 //  :copyright: (c) 2017 Alex Huszagh.
 //  :license: MIT, see LICENSE.md for more details.
 
-#include "column.h"
+#include "format.h"
 #include "record.h"
 #include <pycpp/string/whitespace.h>
 #include <sstream>
@@ -28,6 +28,14 @@ std::string format_sequence_fasta(const std::string& sequence)
     }
 
     return stream.str();
+}
+
+
+std::string format_protein_name_fasta(const std::string& name)
+{
+    // secondary names are delimited by " (";
+    size_t index = name.find(" (");
+    return name.substr(0, index);
 }
 
 // OBJECTS
@@ -62,7 +70,7 @@ std::string column_formatter::name(column c)
         case column_taxonomy:
             return "organism-id";
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -95,7 +103,7 @@ std::string column_formatter::txt(column c)
         case column_taxonomy:
             return "Organism ID";
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -116,7 +124,7 @@ std::string column_formatter::fasta(column c)
 //        case column_sequence:
 //        case column_taxonomy:
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -139,7 +147,7 @@ std::string column_formatter::xml(column c)
 //        case column_sequence:
 //        case column_taxonomy:
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -163,7 +171,7 @@ std::string record_formatter::txt(const record& r, column c)
             return r.sequence;
 //        case column_taxonomy:
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -171,26 +179,29 @@ std::string record_formatter::txt(const record& r, column c)
 std::string record_formatter::fasta(const record& r, column c)
 {
     switch (c) {
-        // TODO:
-//        case column_sequence_version:
-//        case column_protein_evidence:
-//        case column_mass:
-//        case column_length:
-//        case column_gene:
+        case column_sequence_version:
+            return std::to_string(r.sequence_version);
+        case column_protein_evidence:
+            return std::to_string(r.protein_evidence);
+        case column_gene:
+            return r.gene;
         case column_id:
             return r.id;
         case column_mnemonic:
             return r.mnemonic;
-//        case column_name:
-//            TODO: need to consider multiple names
-//        case column_organism:
+        case column_name:
+            return format_protein_name_fasta(r.name);
+        case column_organism:
                 return r.organism;      // TODO: is this correct?
-//        case column_proteome:
         case column_sequence:
             return format_sequence_fasta(r.sequence);
-//        case column_taxonomy:
+        // UNIMPLEMENTED
+        case column_mass:
+        case column_length:
+        case column_proteome:
+        case column_taxonomy:
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
@@ -213,7 +224,7 @@ std::string record_formatter::xml(const record& r, column c)
 //        case column_sequence:
 //        case column_taxonomy:
         default:
-            throw std::invalid_argument("Unknown column");
+            throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 

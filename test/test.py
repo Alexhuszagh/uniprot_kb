@@ -73,20 +73,20 @@ class UniProtRecordTest(unittest.TestCase):
         self.assertGreaterEqual(self.record, blank)
         self.assertGreaterEqual(cpy, self.record)
 
-#    def test_to_string(self):
-#        # TEXT
-#
-#        # FASTA
-#        data = self.record.to_string(uniprot_kb.FASTA).splitlines()
-#        self.assertEquals(len(data), 7)
-#        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
-#        self.assertEquals(data[1], "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKA")
-#        self.assertEquals(data[2], "ENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIIS")
-#        self.assertEquals(data[3], "APSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAIT")
-#        self.assertEquals(data[4], "ATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSV")
-#        self.assertEquals(data[5], "VDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIA")
-#        self.assertEquals(data[6], "LNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE")
-#
+    def test_to_string(self):
+        # TEXT
+
+        # FASTA
+        data = self.record.to_string(uniprot_kb.Format.fasta).splitlines()
+        self.assertEquals(len(data), 7)
+        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
+        self.assertEquals(data[1], "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKA")
+        self.assertEquals(data[2], "ENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIIS")
+        self.assertEquals(data[3], "APSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAIT")
+        self.assertEquals(data[4], "ATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSV")
+        self.assertEquals(data[5], "VDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIA")
+        self.assertEquals(data[6], "LNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE")
+
 #        # XML
 #
 #    def test_to_file(self):
@@ -333,11 +333,11 @@ class UniProtRecordListTest(unittest.TestCase):
 #        # TEXT
 #
 #        # FASTA
-#        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
-#        self.assertEquals(len(data), 21)
-#        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
-#        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
-#
+        data = self.list.to_string(uniprot_kb.Format.fasta).splitlines()
+        self.assertEquals(len(data), 21)
+        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
+        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
+
 #        # XML
 #
 #    def test_to_file(self):
