@@ -77,7 +77,7 @@ EXTENSION_NAMES = [
 
 EXTENSIONS = []
 for name, extras in EXTENSION_NAMES:
-    EXTENSIONS.append(Extension(name='{}.{}'.format(PACKAGE_NAME, name),
+    EXTENSIONS.append(Extension(name='{}'.format(PACKAGE_NAME, name),
         sources=[
             '{}/{}.pyx'.format(PACKAGE_NAME, name),
             'src/{}.cc'.format(name),

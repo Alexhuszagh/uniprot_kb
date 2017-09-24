@@ -1,5 +1,12 @@
 # Roadmap
 
+**Commit**
+- Push local PyCPP changes
+- Add header for record.pxd
+- Define header for fasta.pxd
+- Move to single source file (.so library), no package
+ 
+
 **Short-term**
 - Fix CI integrations for TeaCI
     - Need to ensure Cython is properly installed with the CLI utility

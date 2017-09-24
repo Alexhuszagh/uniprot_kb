@@ -8,28 +8,31 @@
 // CONSTANTS
 // ---------
 
-std::string COLUMN_NAMES[] = {
-    // http://www.uniprot.org/help/uniprotkb_column_names
-    // Example:
-    //      http://www.uniprot.org/uniprot/?query=id:P46406
-    //      &sort=score
-    //      &format=tab
-    //      &columns=version(sequence)
-    "Version (sequence)",       // sequence_version
-    "Protein existence",        // protein_evidence
-    "Entry",                    // id
-    "Entry Name",               // mnemonic
-//    "Status",                   // ??
-    "Protein names",            // name
-//    "Gene names",               // ??
-    "Organism",                 // organism
-    "Length",                   // length
 
-};
+// TODO: remove, deprecated
+//std::string COLUMN_NAMES[] = {
+//    // http://www.uniprot.org/help/uniprotkb_column_names
+//    // Example:
+//    //      http://www.uniprot.org/uniprot/?query=id:P46406
+//    //      &sort=score
+//    //      &format=tab
+//    //      &columns=version(sequence)
+//    "Version (sequence)",       // sequence_version
+//    "Protein existence",        // protein_evidence
+//    "Entry",                    // id
+//    "Entry Name",               // mnemonic
+////    "Status",                   // ??
+//    "Protein names",            // name
+////    "Gene names",               // ??
+//    "Organism",                 // organism
+//    "Length",                   // length
+//
+//};
 
 // FORMATTERS
 // ----------
 
+// TODO: remove, deprecated, moved to `column.cc`
 // TODO: protein_evidence maps numeric codes to string-based
 // identifiers, which demonstrate the evidence of the protein
 // existence
