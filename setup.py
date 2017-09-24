@@ -74,6 +74,7 @@ EXTENSIONS = [
             'src/fasta.cc',
             'src/format.cc',
             'src/record.cc',
+            'third_party/pycpp/pycpp/stream/fstream.cc',
         ],
         include_dirs=INCLUDE_DIRS,
         language='c++')

@@ -185,9 +185,20 @@ cdef class UniProtRecord:
     cpdef to_string(UniProtRecord self, Format fmt):
         return _record_to_string(dereference(self.p), int(fmt))
 
-    cpdef to_file(UniProtRecord self, Format fmt, string path):
-        # TODO: to_file
-        pass
+    cpdef to_file(UniProtRecord self, string path, Format fmt):
+        _record_to_file(dereference(self.p), path, int(fmt))
+
+    @classmethod
+    def from_string(cls, string str, Format fmt):
+        cdef UniProtRecord inst = cls.__new__(cls)
+        inst.p.reset(new _record(_record_from_string(str, int(fmt))))
+        return inst
+
+    @classmethod
+    def from_file(cls, string path, Format fmt):
+        cdef UniProtRecord inst = cls.__new__(cls)
+        inst.p.reset(new _record(_record_from_file(path, int(fmt))))
+        return inst
 
 
 cdef UniProtRecord copy_record(const shared_ptr[_record]& r):
@@ -337,9 +348,20 @@ cdef class UniProtRecordList:
     cpdef to_string(UniProtRecordList self, Format fmt):
         return _list_to_string(self.c, int(fmt))
 
-    cpdef to_file(UniProtRecordList self, Format fmt, string path):
-        # TODO: to_file
-        pass
+    cpdef to_file(UniProtRecordList self, string path, Format fmt):
+        _list_to_file(self.c, path, int(fmt))
+
+    @classmethod
+    def from_string(cls, string str, Format fmt):
+        cdef UniProtRecordList inst = cls.__new__(cls)
+        inst.c = _list_from_string(str, int(fmt))
+        return inst
+
+    @classmethod
+    def from_file(cls, string path, Format fmt):
+        cdef UniProtRecordList inst = cls.__new__(cls)
+        inst.c = _list_from_file(path, int(fmt))
+        return inst
 
     # PRIVATE
     # -------
