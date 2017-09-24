@@ -11,5 +11,15 @@
 # ------------
 
 cdef extern from "util/operator.h" nogil:
+    # FUNCTIONS
+    # ---------
     bint symmetry_cmp[T](const T& l, const T& r, int op) except +
     bint total_cmp[T](const T& l, const T& r, int op) except +
+
+    # FUNCTORS
+    # --------
+    cdef cppclass ptr_equal_to:
+        ptr_equal_to()
+
+    cdef cppclass ptr_less_than:
+        ptr_less_than()

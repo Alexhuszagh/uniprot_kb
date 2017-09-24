@@ -65,14 +65,18 @@ struct record
     std::string sequence;
     std::string taxonomy;
 
-    bool operator==(const record& other) const;
-    bool operator<(const record& other) const;
+    bool operator==(const record& rhs) const;
+    bool operator<(const record& rhs) const;
 };
 
 
 /**
  *  \brief Collection of uniprot records.
  */
-typedef std::vector<std::shared_ptr<record>> record_list;
+struct record_list: std::vector<std::shared_ptr<record>>
+{
+    bool operator==(const record_list& rhs) const;
+    bool operator<(const record_list& rhs) const;
+};
 
 }   /* uniprot */

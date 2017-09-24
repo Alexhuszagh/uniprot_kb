@@ -225,11 +225,11 @@ cdef class UniProtRecordList:
         return UniProtRecordList(self)
 
     def __deepcopy__(UniProtRecordList self, memo):
-        return UniProtRecordList(self)
         cdef UniProtRecordList cpy = UniProtRecordList()
         cdef UniProtRecord r
+        cdef shared_ptr[_record] p
         for r in self:
-            cpy.push_back(new _record(dereference(r.p)))
+            cpy.c.push_back(shared_ptr[_record](new _record(dereference(r.p))))
         return cpy
 
     def __richcmp__(UniProtRecordList self, UniProtRecordList other, int op):
@@ -239,24 +239,33 @@ cdef class UniProtRecordList:
         return self.c.size()
 
     def __contains__(UniProtRecordList self, UniProtRecord value):
-        return array_contains(self.c, value.p)
+        return array_contains_pred(self.c, value.p, ptr_equal_to())
 
-    def __add__(UniProtRecordList self, iterable):
-        l = self.__copy__()
-        l += iterable
-        return l
+    def __add__(lhs, rhs):
+        if isinstance(lhs, UniProtRecordList):
+            lst = lhs.__copy__()
+            lst += rhs
+        else:
+            lst = rhs.__copy__()
+            lst += lhs
+
+        return lst
 
     def __iadd__(UniProtRecordList self, iterable):
         self.extend(iterable)
         return self
 
-    def __radd__(UniProtRecordList self, iterable):
-        return self.__add__(iterable)
+    def __mul__(lhs, rhs):
+        if isinstance(rhs, int):
+            lst = lhs.__copy__()
+            lst *= rhs
+        elif isinstance(lhs, int):
+            lst = rhs.__copy__()
+            lst *= lhs
+        else:
+            raise TypeError("Invalid multiplier: {}".format(type(rhs).__name__))
 
-    def __mul__(UniProtRecordList self, int count):
-        l = self.__copy__()
-        l *= count
-        return l
+        return lst
 
     def __imul__(UniProtRecordList self, int count):
         if count == 0:
@@ -268,9 +277,6 @@ cdef class UniProtRecordList:
             for index in range(length):
                 self.c.push_back(self.c[index])
         return self
-
-    def __rmul__(UniProtRecordList self, int count):
-        return self.__mul__(count)
 
     def __iter__(UniProtRecordList self):
         self.it = self.c.begin()
@@ -284,19 +290,16 @@ cdef class UniProtRecordList:
         return value
 
     @cython.boundscheck(True)
-    @cython.wraparound(True)
     def __getitem__(UniProtRecordList self, int index):
-        return use_record(self.c.at(index))
+        return use_record(self.c.at(self._normalize_index(index)))
 
     @cython.boundscheck(True)
-    @cython.wraparound(True)
     def __setitem__(UniProtRecordList self, int index, UniProtRecord value):
-        self.c[index] = value.p
+        self.c[self._normalize_index(index)] = value.p
 
     @cython.boundscheck(True)
-    @cython.wraparound(True)
     def __delitem__(UniProtRecordList self, int index):
-        array_erase(self.c, index)
+        array_erase(self.c, self._normalize_index(index))
 
     def append(UniProtRecordList self, UniProtRecord value):
         self.c.push_back(value.p)
@@ -306,9 +309,8 @@ cdef class UniProtRecordList:
             self.append(value)
 
     @cython.boundscheck(True)
-    @cython.wraparound(True)
     def insert(UniProtRecordList self, int index, UniProtRecord value):
-        array_insert(self.c, index, value.p)
+        array_insert(self.c, self._normalize_index(index), value.p)
 
     def remove(UniProtRecordList self, UniProtRecord value):
         array_remove(self.c, value.p)
@@ -316,13 +318,15 @@ cdef class UniProtRecordList:
     def clear(UniProtRecordList self):
         self.c.clear()
 
-    def pop(UniProtRecordList self):
+    @cython.boundscheck(True)
+    def pop(UniProtRecordList self, int index = -1):
+        index = self._normalize_index(index)
         if self.c.empty():
             raise IndexError("pop from empty list")
-        self.c.pop_back()
 
-    def pop(UniProtRecordList self, int index):
+        value = self[index]
         del self[index]
+        return value
 
     def index(UniProtRecordList self, UniProtRecord value):
         return array_index(self.c, value.p)
@@ -332,3 +336,9 @@ cdef class UniProtRecordList:
 
     def reverse(UniProtRecordList self):
         array_reverse(self.c)
+
+    # PRIVATE
+    # -------
+
+    def _normalize_index(UniProtRecordList self, int index):
+        return normalize_index(len(self), index)

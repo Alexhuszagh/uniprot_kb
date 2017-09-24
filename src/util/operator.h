@@ -41,3 +41,35 @@ bool total_cmp(const T& l, const T& r, int op)
             return false;
     }
 }
+
+
+// FUNCTORS
+// --------
+
+
+struct ptr_equal_to
+{
+    template <typename T>
+    bool operator()(const T& l, const T& r)
+    {
+        if (l && r) {
+            return *l == *r;
+        } else {
+            return l == r;
+        }
+    }
+};
+
+
+struct ptr_less_than
+{
+    template <typename T>
+    bool operator()(const T& l, const T& r)
+    {
+        if (l && r) {
+            return *l < *r;
+        } else {
+            return l < r;
+        }
+    }
+};

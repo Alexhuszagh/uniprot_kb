@@ -145,10 +145,9 @@ class UniProtRecordListTest(unittest.TestCase):
         cpy = copy.deepcopy(self.list)
         self.assertEquals(self.list, cpy)
         cpy[1].id = "P02769"
-        # TODO: bug... fix
-#        self.assertNotEquals(self.list, cpy)
-#        cpy.append(uniprot_kb.UniProtRecord())
-#        self.assertNotEquals(self.list, cpy)
+        self.assertNotEquals(self.list, cpy)
+        cpy.append(uniprot_kb.UniProtRecord())
+        self.assertNotEquals(self.list, cpy)
 
     def test_richcmp(self):
         blank = uniprot_kb.UniProtRecordList()
@@ -162,25 +161,189 @@ class UniProtRecordListTest(unittest.TestCase):
         self.assertGreater(self.list, blank)
         self.assertGreaterEqual(self.list, blank)
         self.assertGreaterEqual(cpy, self.list)
+
+    def test_len(self):
+        blank = uniprot_kb.UniProtRecordList()
+        self.assertEquals(len(blank), 0)
+
+        cpy = copy.copy(self.list)
+        self.assertEquals(len(cpy), 2)
+        cpy.append(uniprot_kb.UniProtRecord())
+        self.assertEquals(len(cpy), 3)
+
+    def test_contains(self):
+        # empty list
+        blank = uniprot_kb.UniProtRecordList()
+        self.assertFalse(uniprot_kb.UniProtRecord() in blank)
+        self.assertFalse(self.list[0] in blank)
+
+        # non-empty list
+        self.assertFalse(uniprot_kb.UniProtRecord() in self.list)
+        self.assertTrue(self.list[0] in self.list)
+        self.assertTrue(copy.copy(self.list[0]) in self.list)
+
+    def test_iter(self):
+        it = iter(self.list)
+        self.assertEquals(next(it), self.list[0])
+        self.assertEquals(next(it), self.list[1])
+        with self.assertRaises(StopIteration):
+            next(it)
+
+    def test_getitem(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(self.list[1], cpy[1])
+
+        # positive index
+        self.assertEquals(cpy[1].id, "P02769")
+
+        # negative index
+        self.assertEquals(cpy[-1].id, "P02769")
+
+    def test_setitem(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(self.list[1], cpy[1])
+        cpy[0].id = "P04797"
+        cpy[1].id = "P04797"
+        self.assertNotEquals(self.list[1], cpy[1])
+
+        # positive index
+        self.list[1] = cpy[1]
+        self.assertEquals(self.list[1], cpy[1])
+
+        # negative index
+        self.list[-2] = cpy[-2]
+        self.assertEquals(self.list[0], cpy[0])
+
+    def test_delitem(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(len(cpy), 2)
+
+        # positive index
+        del cpy[0]
+        self.assertEquals(len(cpy), 1)
+        self.assertEquals(self.list[1], cpy[0])
+
+        # negative index
+        del cpy[-1]
+        self.assertEquals(len(cpy), 0)
+
+    def test_append(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(len(cpy), 2)
+        item = uniprot_kb.UniProtRecord()
+        cpy.append(item)
+        self.assertEquals(len(cpy), 3)
+        self.assertEquals(cpy[2], item)
+
+    def test_extend(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(len(cpy), 2)
+        item = uniprot_kb.UniProtRecord()
+        cpy.extend([item])
+        self.assertEquals(len(cpy), 3)
+        self.assertEquals(cpy[2], item)
+
+    def test_insert(self):
+        cpy = copy.deepcopy(self.list)
+        cpy.insert(0, uniprot_kb.UniProtRecord())
+        self.assertEquals(len(cpy), 3)
+        self.assertEquals(cpy[0], uniprot_kb.UniProtRecord())
+
+    def test_clear(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(len(cpy), 2)
+        cpy.clear()
+        self.assertEquals(len(cpy), 0)
+
+    def test_pop(self):
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(len(cpy), 2)
+
+        cpy.pop()
+        self.assertEquals(len(cpy), 1)
+        self.assertEquals(cpy[0], self.list[0])
+
+        cpy.pop()
+        self.assertEquals(len(cpy), 0)
+
+        cpy = copy.deepcopy(self.list)
+        cpy.pop(0)
+        self.assertEquals(len(cpy), 1)
+        self.assertEquals(cpy[0], self.list[1])
+
+        # negative index
+        cpy.pop(-1)
+        self.assertEquals(len(cpy), 0)
+
+    def test_index(self):
+        cpy = copy.copy(self.list)
+        self.assertEquals(cpy.index(self.list[0]), 0)
+        with self.assertRaises(IndexError):
+            cpy.index(uniprot_kb.UniProtRecord())
+
+    def test_count(self):
+        cpy = copy.copy(self.list)
+        self.assertEquals(cpy.count(self.list[0]), 1)
+        self.assertEquals(cpy.count(uniprot_kb.UniProtRecord()), 0)
+
+    def test_reverse(self):
+        cpy = copy.copy(self.list)
+        cpy.reverse()
+        self.assertEquals(cpy[0], self.list[1])
+        self.assertEquals(cpy[1], self.list[0])
+
+    def test_add(self):
+        cpy = copy.copy(self.list)
+        item = uniprot_kb.UniProtRecord()
+
+        # __add__
+        self.assertEquals(len(cpy + [item]), 3)
+        self.assertEquals(len(cpy), 2)
+
+        # __radd__
+        self.assertEquals(len([item] + cpy), 3)
+        self.assertEquals(len(cpy), 2)
+
+        # __iadd__
+        cpy += [item]
+        self.assertEquals(len(cpy), 3)
+
+    def test_mul(self):
+        cpy = copy.copy(self.list)
+
+        # __mul__
+        self.assertEquals(len(cpy * 1), 2)
+        self.assertEquals(len(cpy * 2), 4)
+        self.assertEquals(len(cpy), 2)
+
+        # __rmul__
+        self.assertEquals(len(1 * cpy), 2)
+        self.assertEquals(len(2 * cpy), 4)
+        self.assertEquals(len(cpy), 2)
+
+        # __imul__
+        cpy *= 2
+        self.assertEquals(len(cpy), 4)
+
+        # type-error
+        with self.assertRaises(TypeError):
+            cpy * []
+
+#    def test_to_string(self):
+#        # TEXT
 #
-#    # TODO: test insert
-#    # TODO: test deepcopy
+#        # FASTA
+#        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
+#        self.assertEquals(len(data), 21)
+#        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
+#        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
 #
-##    def test_to_string(self):
-##        # TEXT
-##
-##        # FASTA
-##        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
-##        self.assertEquals(len(data), 21)
-##        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
-##        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
-##
-##        # XML
-##
-##    def test_to_file(self):
-##        # TEXT
-##
-##        # FASTA
-##        pass
-##
-##        # XML
+#        # XML
+#
+#    def test_to_file(self):
+#        # TEXT
+#
+#        # FASTA
+#        pass
+#
+#        # XML

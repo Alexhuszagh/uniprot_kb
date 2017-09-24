@@ -35,15 +35,45 @@ decltype(auto) tie(const record& r)
 // -------
 
 
-bool record::operator==(const record& other) const
+bool record::operator==(const record& rhs) const
 {
-    return tie(*this) == tie(other);
+    return tie(*this) == tie(rhs);
 }
 
 
-bool record::operator<(const record& other) const
+bool record::operator<(const record& rhs) const
 {
-    return std::tie(length, mass) < std::tie(other.length, other.mass);
+    return std::tie(length, mass) < std::tie(rhs.length, rhs.mass);
+}
+
+
+bool record_list::operator==(const record_list& rhs) const
+{
+    auto pred = [](const value_type& l, const value_type& r) -> bool
+    {
+        if (l && r) {
+            return *l == *r;
+        } else {
+            return l == r;
+        }
+    };
+
+    return size() == rhs.size() && std::equal(begin(), end(), rhs.begin(), pred);
+}
+
+
+bool record_list::operator<(const record_list& rhs) const
+{
+    auto pred = [](const value_type& l, const value_type& r) -> bool
+    {
+        if (l && r) {
+            return *l < *r;
+        } else {
+            return l < r;
+        }
+    };
+
+    return std::lexicographical_compare(begin(), end(), rhs.begin(), rhs.end(), pred);
 }
 
 }   /* uniprot */

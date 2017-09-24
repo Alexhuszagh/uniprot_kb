@@ -5,13 +5,36 @@
 
 #include <algorithm>
 
-// FUNCTIONS
-// ---------
+// UTILITY
+// -------
+
+std::ptrdiff_t normalize_index(size_t length, std::ptrdiff_t index)
+{
+    if (index < 0) {
+        return length + index;
+    } else {
+        return index;
+    }
+}
+
+// ARRAY
+// -----
 
 template <typename T, typename V>
 bool array_contains(const T& t, const V& v)
 {
     return std::find(std::begin(t), std::end(t), v) != std::end(t);
+}
+
+
+template <typename T, typename V, typename Pred>
+bool array_contains_pred(const T& t, const V& v, Pred pred)
+{
+    auto p = [&v, &pred](const V& r) -> bool
+    {
+        return pred(v, r);
+    };
+    return std::find_if(std::begin(t), std::end(t), p) != std::end(t);
 }
 
 
@@ -71,15 +94,15 @@ size_t array_count(const T& t, const V& v)
 }
 
 
+// MAP
+// ---
+
+
 template <typename T, typename V>
 bool map_contains(const T& t, const V& v)
 {
     return t.find(v) != std::end(t);
 }
 
-
+// TODO:
 // map insert
-
-
-//int index_container[T, V](const T& t, const V& v) except +
-//int count_container[T, V](const T& t, const V& v) except +
