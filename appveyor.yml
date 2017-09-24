@@ -28,6 +28,7 @@ install:
   - choco install -y swig
   - SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
   - python --version
+  - python -m pip install cython
 
 build_script:
   - python setup.py build

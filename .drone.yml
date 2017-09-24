@@ -10,7 +10,8 @@ build:
     - wget https://bootstrap.pypa.io/get-pip.py
     - python get-pip.py
     - python --version
-  - python setup.py build
+    - python -m pip install cython
+    - python setup.py build
     - python setup.py test
 
 matrix:
