@@ -2,6 +2,10 @@
 //  :license: MIT, see LICENSE.md for more details.
 
 #include "column.h"
+#include "record.h"
+#include <pycpp/string/whitespace.h>
+#include <sstream>
+#include <stdexcept>
 
 
 namespace uniprot
@@ -17,9 +21,10 @@ static constexpr size_t SEQUENCE_LINE_LENGTH = 60;
 std::string format_sequence_fasta(const std::string& sequence)
 {
     std::stringstream stream;
+    stream << PYCPP_NAMESPACE::NEWLINE;
     for (size_t i = 0 ; i < sequence.size(); i += SEQUENCE_LINE_LENGTH) {
         stream << sequence.substr(i, SEQUENCE_LINE_LENGTH);
-        stream << "\n";
+        stream << PYCPP_NAMESPACE::NEWLINE;
     }
 
     return stream.str();

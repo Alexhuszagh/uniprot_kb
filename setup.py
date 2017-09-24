@@ -57,7 +57,8 @@ IS_64BIT = sys.maxsize > 2**32
 IS_WINDOWS = platform.system() == 'Windows'
 INCLUDE_DIRS = [
     'src',
-    'third_party/pycpp'
+    'third_party/pycpp',
+    'third_party/pycpp/third_party/warnings/src'
 ]
 
 PYCPP_SOURCES = glob.glob('third_party/pycpp/**/*.cc')
@@ -67,7 +68,11 @@ PYCPP_SOURCES = glob.glob('third_party/pycpp/**/*.cc')
 
 PACKAGE_NAME = "uniprot_kb"
 EXTENSION_NAMES = [
-    ("record", [])
+    # TODO: Change to a single file
+    ("record", [
+        "src/column.cc",
+        "src/fasta.cc",
+    ])
 ]
 
 EXTENSIONS = []
