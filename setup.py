@@ -67,23 +67,17 @@ PYCPP_SOURCES = glob.glob('third_party/pycpp/**/*.cc')
 # ---------
 
 PACKAGE_NAME = "uniprot_kb"
-EXTENSION_NAMES = [
-    # TODO: Change to a single file
-    ("record", [
-        "src/column.cc",
-        "src/fasta.cc",
-    ])
-]
-
-EXTENSIONS = []
-for name, extras in EXTENSION_NAMES:
-    EXTENSIONS.append(Extension(name='{}'.format(PACKAGE_NAME, name),
+EXTENSIONS = [
+    Extension(name=PACKAGE_NAME,
         sources=[
-            '{}/{}.pyx'.format(PACKAGE_NAME, name),
-            'src/{}.cc'.format(name),
-        ] + extras,
+            '{}/record.pyx'.format(PACKAGE_NAME),
+            'src/column.cc',
+            'src/fasta.cc',
+            'src/record.cc',
+        ],
         include_dirs=INCLUDE_DIRS,
-        language='c++'))
+        language='c++')
+]
 
 # COMMANDS
 # --------
@@ -202,7 +196,8 @@ COMMANDS = {
 
 setup(name=PACKAGE_NAME,
     version="0.0.1",
-    packages=[PACKAGE_NAME],
+# TODO: there's some term here...
+#    extension=PACKAGE_NAME,
     description=SHORT_DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     license="MIT",
