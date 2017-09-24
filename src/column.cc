@@ -108,8 +108,7 @@ std::string column_formatter::fasta(column c)
 //        case column_name:
 //        case column_organism:
 //        case column_proteome:
-        case column_sequence:
-            return format_sequence_fasta(r.sequence);
+//        case column_sequence:
 //        case column_taxonomy:
         default:
             throw std::invalid_argument("Unknown column");
@@ -127,13 +126,12 @@ std::string column_formatter::xml(column c)
 //        case column_length:
 //        case column_gene:
 //        case column_id:
-        case column_mnemonic:
-            return r.mnemonic;
+//        case column_mnemonic:
 //        case column_name:
+//            TODO: need to consider multiple names
 //        case column_organism:
 //        case column_proteome:
-        case column_sequence:
-            return r.sequence;
+//        case column_sequence:
 //        case column_taxonomy:
         default:
             throw std::invalid_argument("Unknown column");
@@ -153,6 +151,7 @@ std::string record_formatter::txt(const record& r, column c)
         case column_mnemonic:
             return r.mnemonic;
 //        case column_name:
+//            TODO: need to consider multiple names
 //        case column_organism:
 //        case column_proteome:
         case column_sequence:
@@ -173,15 +172,17 @@ std::string record_formatter::fasta(const record& r, column c)
 //        case column_mass:
 //        case column_length:
 //        case column_gene:
-//        case column_id:
+        case column_id:
+            return r.id;
         case column_mnemonic:
             return r.mnemonic;
 //        case column_name:
+//            TODO: need to consider multiple names
 //        case column_organism:
+                return r.organism;      // TODO: is this correct?
 //        case column_proteome:
-//        case column_sequence:
-// TODO: need to split into lines of 60 chars...
-//            return r.sequence;
+        case column_sequence:
+            return format_sequence_fasta(r.sequence);
 //        case column_taxonomy:
         default:
             throw std::invalid_argument("Unknown column");
@@ -199,7 +200,8 @@ std::string record_formatter::xml(const record& r, column c)
 //        case column_length:
 //        case column_gene:
 //        case column_id:
-//        case column_mnemonic:
+        case column_mnemonic:
+            return r.mnemonic;
 //        case column_name:
 //        case column_organism:
 //        case column_proteome:
