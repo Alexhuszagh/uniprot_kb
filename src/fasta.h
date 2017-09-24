@@ -11,7 +11,8 @@
 
 #include <iostream>
 
-
+namespace uniprot
+{
 // FUNCTIONS
 // ---------
 
@@ -54,3 +55,5 @@ UniProtRecord& load_fasta(UniProtRecord& record, std::istream& stream);
  *  \brief Load FASTA to UniProt record list.
  */
 UniProtRecordList& load_fasta(UniProtRecordList& list, std::istream& stream);
+
+}   /* uniprot */

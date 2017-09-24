@@ -89,6 +89,9 @@ cdef class UniProtRecord:
     def __richcmp__(UniProtRecord self, UniProtRecord other, int op):
         return total_cmp(dereference(self.p), dereference(other.p), op)
 
+    # PROPERTIES
+    # ----------
+
     property sequence_version:
         @cython.nonecheck(True)
         def __get__(UniProtRecord self):
@@ -196,6 +199,13 @@ cdef class UniProtRecord:
         @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
             dereference(self.p).taxonomy = value
+
+    # SERIALIZATION
+    # -------------
+
+    # TODO: fasta
+    # TODO: text
+    # TODO: xml
 
 
 cdef UniProtRecord copy_record(const shared_ptr[_record]& r):

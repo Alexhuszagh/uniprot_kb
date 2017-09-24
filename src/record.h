@@ -36,8 +36,8 @@ static constexpr size_t MNEMONIC_LENGTH = 11;
  *  \param gene             HGNC Gene name.
  *  \param id               Accession number (randomly assigned identifier).
  *  \param mnemonic         Entry name (readable identifier).
- *  \param organism         Readable organism name.
  *  \param name             Protein name.
+ *  \param organism         Readable organism name.
  *  \param proteome         Uniprot proteome identifier.
  *  \param sequence         Protein aminoacid sequence.
  *  \param taxonomy         Taxonomic identifier.

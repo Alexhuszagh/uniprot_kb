@@ -21,9 +21,9 @@
  */
 enum format
 {
-    TEXT = 0,
-    FASTA = 1,
-    XML = 2,
+    format_txt = 0,
+    format_fasta,
+    format_xml,
 };
 
 
@@ -36,9 +36,9 @@ std::string to_string(const T& t, format fmt)
 {
     std::string str;
     switch (fmt) {
-        case TEXT:      return to_text(str, t);
-        case FASTA:     return to_fasta(str, t);
-        case XML:       return to_xml(str, t);
+        case format_txt:        return to_text(str, t);
+        case format_fasta:      return to_fasta(str, t);
+        case format_xml:        return to_xml(str, t);
         default:        throw std::runtime_error("Unrecognized option.");
     }
 }
@@ -49,9 +49,9 @@ T from_string(const std::string& str, format fmt)
 {
     T t;
     switch (fmt) {
-        case TEXT:      return load_text(t, str);
-        case FASTA:     return load_fasta(t, str);
-        case XML:       return load_xml(t, str);
+        case format_txt:        return load_text(t, str);
+        case format_fasta:      return load_fasta(t, str);
+        case format_xml:        return load_xml(t, str);
         default:        throw std::runtime_error("Unrecognized option.");
     }
 }
@@ -62,9 +62,9 @@ void to_file(const T& t, const std::string& path, format fmt)
 {
     ofstream stream(path, std::ios_base::binary);
     switch (fmt) {
-        case TEXT:      to_text(stream, t);     return;
-        case FASTA:     to_fasta(stream, t);    return;
-        case XML:       to_xml(stream, t);      return;
+        case format_txt:        to_text(stream, t);     return;
+        case format_fasta:      to_fasta(stream, t);    return;
+        case format_xml:        to_xml(stream, t);      return;
         default:        throw std::runtime_error("Unrecognized option.");
     }
 }
@@ -76,9 +76,9 @@ T from_file(const std::string& path, format fmt)
     ifstream stream(path, std::ios_base::binary);
     T t;
     switch (fmt) {
-        case TEXT:      return load_text(t, stream);
-        case FASTA:     return load_fasta(t, stream);
-        case XML:       return load_xml(t, stream);
+        case format_txt:        return load_text(t, stream);
+        case format_fasta:      return load_fasta(t, stream);
+        case format_xml:        return load_xml(t, stream);
         default:        throw std::runtime_error("Unrecognized option.");
     }
 }
