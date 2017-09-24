@@ -5,6 +5,7 @@
 cimport cython
 from cython.operator cimport dereference, preincrement
 from libc.stdint cimport *
+from libcpp.memory cimport shared_ptr
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from uniprot_kb.util.container cimport *
@@ -29,7 +30,10 @@ cdef extern from "record.h" nogil:
         string sequence;
         string taxonomy;
 
-    cdef cppclass _record_list "uniprot::record_list"(vector[_record]):
+        _record()
+        _record(const _record&);
+
+    cdef cppclass _record_list "uniprot::record_list"(vector[shared_ptr[_record]]):
         pass
 
 
@@ -40,149 +44,177 @@ cdef extern from "record.h" nogil:
 cdef class UniProtRecord:
     '''Model for a single record from a UniProt KB query.'''
 
-    cdef _record c
+    cdef shared_ptr[_record] p
 
-    def __cinit__(UniProtRecord self,
-                  int sequence_version = 0,
-                  int protein_evidence = 1,
-                  float mass = 0,
-                  int length = 0,
-                  gene = u"",
-                  id = u"",
-                  mnemonic = u"",
-                  name = u"",
-                  organism = u"",
-                  proteome = u"",
-                  sequence = u"",
-                  taxonomy = u""):
-        self.c.sequence_version = sequence_version
-        self.c.protein_evidence = protein_evidence
-        self.c.mass = mass
-        self.c.length = length
-        self.c.gene = gene.encode('UTF-8') if type(gene) == unicode else gene
-        self.c.id = id.encode('UTF-8') if type(id) == unicode else id
-        self.c.mnemonic = mnemonic.encode('UTF-8') if type(mnemonic) == unicode else mnemonic
-        self.c.name = name.encode('UTF-8') if type(name) == unicode else name
-        self.c.organism = organism.encode('UTF-8') if type(organism) == unicode else organism
-        self.c.proteome = proteome.encode('UTF-8') if type(proteome) == unicode else proteome
-        self.c.sequence = sequence.encode('UTF-8') if type(sequence) == unicode else sequence
-        self.c.taxonomy = taxonomy.encode('UTF-8') if type(taxonomy) == unicode else taxonomy
+    def __init__(UniProtRecord self,
+                 int sequence_version = 0,
+                 int protein_evidence = 1,
+                 float mass = 0,
+                 int length = 0,
+                 gene = u"",
+                 id = u"",
+                 mnemonic = u"",
+                 name = u"",
+                 organism = u"",
+                 proteome = u"",
+                 sequence = u"",
+                 taxonomy = u""):
+        # allocate/null-initialize
+        self.p.reset(new _record())
+        cdef _record* c = self.p.get()
 
+        # construct
+        c.sequence_version = sequence_version
+        c.protein_evidence = protein_evidence
+        c.mass = mass
+        c.length = length
+        c.gene = gene.encode('UTF-8') if type(gene) == unicode else gene
+        c.id = id.encode('UTF-8') if type(id) == unicode else id
+        c.mnemonic = mnemonic.encode('UTF-8') if type(mnemonic) == unicode else mnemonic
+        c.name = name.encode('UTF-8') if type(name) == unicode else name
+        c.organism = organism.encode('UTF-8') if type(organism) == unicode else organism
+        c.proteome = proteome.encode('UTF-8') if type(proteome) == unicode else proteome
+        c.sequence = sequence.encode('UTF-8') if type(sequence) == unicode else sequence
+        c.taxonomy = taxonomy.encode('UTF-8') if type(taxonomy) == unicode else taxonomy
+
+    @cython.nonecheck(True)
     def __copy__(UniProtRecord self):
-        return copy_record(self.c)
+        return copy_record(self.p)
 
+    @cython.nonecheck(True)
     def __deepcopy__(UniProtRecord self, memo):
-        return copy_record(self.c)
+        return copy_record(self.p)
 
+    @cython.nonecheck(True)
     def __richcmp__(UniProtRecord self, UniProtRecord other, int op):
-        return total_cmp(self.c, other.c, op)
+        return total_cmp(dereference(self.p), dereference(other.p), op)
 
     property sequence_version:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.sequence_version
+            return dereference(self.p).sequence_version
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, int value):
-            self.c.sequence_version = value
+            dereference(self.p).sequence_version = value
 
     property protein_evidence:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.protein_evidence
+            return dereference(self.p).protein_evidence
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, int value):
-            self.c.protein_evidence = value
+            dereference(self.p).protein_evidence = value
 
     property mass:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.mass
+            return dereference(self.p).mass
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, float value):
-            self.c.mass = value
+            dereference(self.p).mass = value
 
     property length:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.length
+            return dereference(self.p).length
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, int value):
-            self.c.length = value
+            dereference(self.p).length = value
 
     property gene:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.gene
+            return dereference(self.p).gene
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.gene = value
+            dereference(self.p).gene = value
 
     property id:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.id
+            return dereference(self.p).id
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.id = value
+            dereference(self.p).id = value
 
     property mnemonic:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.mnemonic
+            return dereference(self.p).mnemonic
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.mnemonic = value
+            dereference(self.p).mnemonic = value
 
     property name:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.name
+            return dereference(self.p).name
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.name = value
+            dereference(self.p).name = value
 
     property organism:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.organism
+            return dereference(self.p).organism
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.organism = value
+            dereference(self.p).organism = value
 
     property proteome:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.proteome
+            return dereference(self.p).proteome
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.proteome = value
+            dereference(self.p).proteome = value
 
     property sequence:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.sequence
+            return dereference(self.p).sequence
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.sequence = value
+            dereference(self.p).sequence = value
 
     property taxonomy:
+        @cython.nonecheck(True)
         def __get__(UniProtRecord self):
-            return self.c.taxonomy
+            return dereference(self.p).taxonomy
 
+        @cython.nonecheck(True)
         def __set__(UniProtRecord self, bytes value):
-            self.c.taxonomy = value
+            dereference(self.p).taxonomy = value
 
 
-cdef UniProtRecord copy_record(const _record& r):
-    return UniProtRecord(r.sequence_version,
-        r.protein_evidence,
-        r.mass,
-        r.length,
-        r.gene,
-        r.id,
-        r.mnemonic,
-        r.name,
-        r.organism,
-        r.proteome,
-        r.sequence,
-        r.taxonomy
-    )
+cdef UniProtRecord copy_record(const shared_ptr[_record]& r):
+    cdef UniProtRecord cpy = UniProtRecord.__new__(UniProtRecord)
+    cpy.p.reset(new _record(dereference(r)))
+    return cpy
+
+
+cdef UniProtRecord use_record(const shared_ptr[_record]& r):
+    cdef UniProtRecord cpy = UniProtRecord.__new__(UniProtRecord)
+    cpy.p = r
+    return cpy
 
 
 cdef class UniProtRecordList:
     '''Model for a collection of UniProt records.'''
 
     cdef _record_list c
-    cdef vector[_record].iterator it
+    cdef vector[shared_ptr[_record]].iterator it
 
     def __cinit__(UniProtRecordList self, iterable=None):
         self.it = self.c.end()
@@ -193,11 +225,12 @@ cdef class UniProtRecordList:
         return UniProtRecordList(self)
 
     def __deepcopy__(UniProtRecordList self, memo):
-        copy = UniProtRecordList()
-        for item in self:
-            r = <UniProtRecord>(item)
-            copy.append(copy_record(r.c))
-        return copy
+        return UniProtRecordList(self)
+        cdef UniProtRecordList cpy = UniProtRecordList()
+        cdef UniProtRecord r
+        for r in self:
+            cpy.push_back(new _record(dereference(r.p)))
+        return cpy
 
     def __richcmp__(UniProtRecordList self, UniProtRecordList other, int op):
         return total_cmp(self.c, other.c, op)
@@ -206,7 +239,7 @@ cdef class UniProtRecordList:
         return self.c.size()
 
     def __contains__(UniProtRecordList self, UniProtRecord value):
-        return array_contains(self.c, value.c)
+        return array_contains(self.c, value.p)
 
     def __add__(UniProtRecordList self, iterable):
         l = self.__copy__()
@@ -246,27 +279,27 @@ cdef class UniProtRecordList:
     def __next__(UniProtRecordList self):
         if self.it == self.c.end():
             raise StopIteration()
-        value = copy_record(dereference(self.it))
+        value = use_record(dereference(self.it))
         preincrement(self.it)
         return value
 
     @cython.boundscheck(True)
     @cython.wraparound(True)
     def __getitem__(UniProtRecordList self, int index):
-        return copy_record(self.c.at(index))
+        return use_record(self.c.at(index))
 
     @cython.boundscheck(True)
     @cython.wraparound(True)
     def __setitem__(UniProtRecordList self, int index, UniProtRecord value):
-        self.c[index] = value.c
+        self.c[index] = value.p
 
     @cython.boundscheck(True)
     @cython.wraparound(True)
     def __delitem__(UniProtRecordList self, int index):
-        self.c.erase(self.c.begin() + index);
+        array_erase(self.c, index)
 
     def append(UniProtRecordList self, UniProtRecord value):
-        self.c.push_back(value.c)
+        self.c.push_back(value.p)
 
     def extend(UniProtRecordList self, iterable):
         for value in iterable:
@@ -275,10 +308,10 @@ cdef class UniProtRecordList:
     @cython.boundscheck(True)
     @cython.wraparound(True)
     def insert(UniProtRecordList self, int index, UniProtRecord value):
-        array_insert(self.c, index, value.c)
+        array_insert(self.c, index, value.p)
 
     def remove(UniProtRecordList self, UniProtRecord value):
-        array_remove(self.c, value.c)
+        array_remove(self.c, value.p)
 
     def clear(UniProtRecordList self):
         self.c.clear()
@@ -291,11 +324,11 @@ cdef class UniProtRecordList:
     def pop(UniProtRecordList self, int index):
         del self[index]
 
-#    def index(UniProtRecordList self, UniProtRecord value):
-#        return index_container(self.c, value.c)
-#
-#    def count(UniProtRecordList self, UniProtRecord value):
-#        return count_container(self.c, value.c)
+    def index(UniProtRecordList self, UniProtRecord value):
+        return array_index(self.c, value.p)
+
+    def count(UniProtRecordList self, UniProtRecord value):
+        return array_count(self.c, value.p)
 
     def reverse(UniProtRecordList self):
         array_reverse(self.c)

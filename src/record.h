@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>           // TODO: change to deque when Cython issue #1867 is patched
 
@@ -72,6 +73,6 @@ struct record
 /**
  *  \brief Collection of uniprot records.
  */
-typedef std::vector<record> record_list;
+typedef std::vector<std::shared_ptr<record>> record_list;
 
-}   /* uniprot */    
+}   /* uniprot */

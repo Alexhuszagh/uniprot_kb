@@ -31,14 +31,43 @@ void array_insert(T& t, size_t index, const V& v)
 }
 
 
+template <typename T>
+void array_erase(T& t, size_t index)
+{
+    t.erase(std::begin(t) + index);
+}
+
+
 template <typename T, typename V>
 void array_remove(T& t, const V& v)
 {
-    auto it = std::find(std::begin(t), std::end(t), v);
-    if (it == std::end(t)) {
+    auto first = std::begin(t);
+    auto last = std::end(t);
+    auto it = std::find(first, last, v);
+    if (it == last) {
         throw std::out_of_range("Value not found in container.");
     }
     t.erase(it);
+}
+
+
+template <typename T, typename V>
+size_t array_index(const T& t, const V& v)
+{
+    auto first = std::begin(t);
+    auto last = std::end(t);
+    auto it = std::find(first, last, v);
+    if (it == last) {
+        throw std::out_of_range("Value not found in container.");
+    }
+    return std::distance(first, it);
+}
+
+
+template <typename T, typename V>
+size_t array_count(const T& t, const V& v)
+{
+    return std::count(std::begin(t), std::end(t), v);
 }
 
 

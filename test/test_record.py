@@ -45,7 +45,22 @@ class UniProtRecordTest(unittest.TestCase):
         self.assertEquals(self.record.sequence, "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKAENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIISAPSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAITATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSVVDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIALNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE")
         self.assertEquals(self.record.taxonomy, "9986")
 
-    def test_operators(self):
+    def test_copy(self):
+        # test shallow copy
+        cpy = copy.copy(self.record)
+        self.assertEquals(self.record, cpy)
+        cpy.id = "P04797"
+        self.assertNotEquals(self.record, cpy)
+        self.assertNotEquals(self.record.id, cpy.id)
+
+        # test deep copy
+        cpy = copy.deepcopy(self.record)
+        self.assertEquals(self.record, cpy)
+        cpy.id = "P04797"
+        self.assertNotEquals(self.record, cpy)
+        self.assertNotEquals(self.record.id, cpy.id)
+
+    def test_richcmp(self):
         blank = uniprot_kb.UniProtRecord()
         cpy = copy.copy(self.record)
 
@@ -117,24 +132,55 @@ class UniProtRecordListTest(unittest.TestCase):
             "MKWVTFISLLLLFSSAYSRGVFRRDTHKSEIAHRFKDLGEEHFKGLVLIAFSQYLQQCPFDEHVKLVNELTEFAKTCVADESHAGCEKSLHTLFGDELCKVASLRETYGDMADCCEKQEPERNECFLSHKDDSPDLPKLKPDPNTLCDEFKADEKKFWGKYLYEIARRHPYFYAPELLYYANKYNGVFQECCQAEDKGACLLPKIETMREKVLASSARQRLRCASIQKFGERALKAWSVARLSQKFPKAEFVEVTKLVTDLTKVHKECCHGDLLECADDRADLAKYICDNQDTISSKLKECCDKPLLEKSHCIAEVEKDAIPENLPPLTADFAEDKDVCKNYQEAKDAFLGSFLYEYSRRHPEYAVSVLLRLAKEYEATLEECCAKDDPHACYSTVFDKLKHLVDEPQNLIKQNCDQFEKLGEYGFQNALIVRYTRKVPQVSTPTLVEVSRSLGKVGTRCCTKPESERMPCTEDYLSLILNRLCVLHEKTPVSEKVTKCCTESLVNRRPCFSALTPDETYVPKAFDEKLFTFHADICTLPDTEKQIKKQTALVELLKHKPKATEEQLKTVMENFVAFVDKCCAADDKEACFAVEGPKLVVSTQTALA",
             "9913"))
 
-    # TODO: test insert
-    # TODO: test deepcopy
+    def test_copy(self):
+        # test shallow copy (actually a deepcopy)
+        cpy = copy.copy(self.list)
+        self.assertEquals(self.list, cpy)
+        cpy[1].id = "P04797"
+        self.assertEquals(self.list, cpy)
+        cpy.append(uniprot_kb.UniProtRecord())
+        self.assertNotEquals(self.list, cpy)
 
-#    def test_to_string(self):
-#        # TEXT
+        # test deep copy
+        cpy = copy.deepcopy(self.list)
+        self.assertEquals(self.list, cpy)
+        cpy[1].id = "P02769"
+        # TODO: bug... fix
+#        self.assertNotEquals(self.list, cpy)
+#        cpy.append(uniprot_kb.UniProtRecord())
+#        self.assertNotEquals(self.list, cpy)
+
+    def test_richcmp(self):
+        blank = uniprot_kb.UniProtRecordList()
+        cpy = copy.copy(self.list)
+
+        self.assertNotEquals(self.list, blank)
+        self.assertEquals(self.list, cpy)
+        self.assertLess(blank, self.list)
+        self.assertLessEqual(blank, self.list)
+        self.assertLessEqual(cpy, self.list)
+        self.assertGreater(self.list, blank)
+        self.assertGreaterEqual(self.list, blank)
+        self.assertGreaterEqual(cpy, self.list)
 #
-#        # FASTA
-#        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
-#        self.assertEquals(len(data), 21)
-#        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
-#        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
+#    # TODO: test insert
+#    # TODO: test deepcopy
 #
-#        # XML
-#
-#    def test_to_file(self):
-#        # TEXT
-#
-#        # FASTA
-#        pass
-#
-#        # XML
+##    def test_to_string(self):
+##        # TEXT
+##
+##        # FASTA
+##        data = self.list.to_string(uniprot_kb.FASTA).splitlines()
+##        self.assertEquals(len(data), 21)
+##        self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")
+##        self.assertEquals(data[8], ">sp|P02769|ALBU_BOVIN Serum albumin OS=Bos taurus GN=ALB PE=1 SV=4")
+##
+##        # XML
+##
+##    def test_to_file(self):
+##        # TEXT
+##
+##        # FASTA
+##        pass
+##
+##        # XML
