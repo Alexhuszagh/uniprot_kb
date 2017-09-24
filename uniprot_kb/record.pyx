@@ -3,9 +3,7 @@
 
 cimport cython
 from cython.operator cimport dereference, preincrement
-from libc.stdint cimport *
 from uniprot_kb.fasta cimport *
-from uniprot_kb.record cimport *
 from uniprot_kb.util.container cimport *
 from uniprot_kb.util.operator cimport *
 
@@ -198,8 +196,10 @@ cdef class UniProtRecordList:
     cdef _record_list c
     cdef vector[shared_ptr[_record]].iterator it
 
-    def __cinit__(UniProtRecordList self, iterable=None):
+    def __cinit__(UniProtRecordList self):
         self.it = self.c.end()
+
+    def __init__(UniProtRecordList self, iterable=None):
         if iterable is not None:
             self.extend(iterable)
 
@@ -283,25 +283,25 @@ cdef class UniProtRecordList:
     def __delitem__(UniProtRecordList self, int index):
         array_erase(self.c, self._normalize_index(index))
 
-    def append(UniProtRecordList self, UniProtRecord value):
+    cpdef append(UniProtRecordList self, UniProtRecord value):
         self.c.push_back(value.p)
 
-    def extend(UniProtRecordList self, iterable):
+    cpdef extend(UniProtRecordList self, iterable):
         for value in iterable:
             self.append(value)
 
     @cython.boundscheck(True)
-    def insert(UniProtRecordList self, int index, UniProtRecord value):
+    cpdef insert(UniProtRecordList self, int index, UniProtRecord value):
         array_insert(self.c, self._normalize_index(index), value.p)
 
-    def remove(UniProtRecordList self, UniProtRecord value):
+    cpdef remove(UniProtRecordList self, UniProtRecord value):
         array_remove(self.c, value.p)
 
-    def clear(UniProtRecordList self):
+    cpdef clear(UniProtRecordList self):
         self.c.clear()
 
     @cython.boundscheck(True)
-    def pop(UniProtRecordList self, int index = -1):
+    cpdef pop(UniProtRecordList self, int index = -1):
         index = self._normalize_index(index)
         if self.c.empty():
             raise IndexError("pop from empty list")
@@ -310,17 +310,17 @@ cdef class UniProtRecordList:
         del self[index]
         return value
 
-    def index(UniProtRecordList self, UniProtRecord value):
+    cpdef index(UniProtRecordList self, UniProtRecord value):
         return array_index(self.c, value.p)
 
-    def count(UniProtRecordList self, UniProtRecord value):
+    cpdef count(UniProtRecordList self, UniProtRecord value):
         return array_count(self.c, value.p)
 
-    def reverse(UniProtRecordList self):
+    cpdef reverse(UniProtRecordList self):
         array_reverse(self.c)
 
     # PRIVATE
     # -------
 
-    def _normalize_index(UniProtRecordList self, int index):
+    cdef _normalize_index(UniProtRecordList self, int index):
         return normalize_index(len(self), index)

@@ -2,15 +2,14 @@
 #  :license: MIT, see LICENSE.md for more details.
 
 from libcpp.string cimport string
+from uniprot_kb.record cimport *
 
 # DECLARATIONS
 # ------------
 
 
 cdef extern from "fasta.h" nogil:
-    # cdef cppclass _record "uniprot::record"
     # How do I cdef functions?
-
-    #string& to_fasta(string& str, const record& r)
-    #string& to_fasta(string& str, const record_list& l)
+#    cdef string& _record_to_fasta(string& str, const _record& r) "uniprot::to_fasta"
+#    string& _list_to_fasta(string& str, const _record_list& l) "uniprot::to_fasta"
     pass
