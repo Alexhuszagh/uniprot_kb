@@ -8,5 +8,9 @@ from libcpp.string cimport string
 
 
 cdef extern from "fasta.h" nogil:
+    # cdef cppclass _record "uniprot::record"
+    # How do I cdef functions?
+
     #string& to_fasta(string& str, const record& r)
     #string& to_fasta(string& str, const record_list& l)
+    pass

@@ -5,7 +5,7 @@
 - Add header for record.pxd
 - Define header for fasta.pxd
 - Move to single source file (.so library), no package
- 
+    - Need to add a py_extension? Dunno what it is...
 
 **Short-term**
 - Fix CI integrations for TeaCI

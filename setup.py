@@ -196,8 +196,6 @@ COMMANDS = {
 
 setup(name=PACKAGE_NAME,
     version="0.0.1",
-# TODO: there's some term here...
-#    extension=PACKAGE_NAME,
     description=SHORT_DESCRIPTION,
     long_description=LONG_DESCRIPTION,
     license="MIT",
