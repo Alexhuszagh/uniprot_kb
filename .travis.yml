@@ -47,5 +47,6 @@ install:
 
 script:
   - python --version
+  - cython --version
   - python setup.py build
   - python setup.py test

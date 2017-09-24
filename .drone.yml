@@ -5,11 +5,12 @@ build:
   commands:
     - if [ $$arch = 32 ]; then target=i686; fi
     - if [ $$arch = 64 ]; then target=x86_64; fi
-    - pacman -S --needed --noconfirm --noprogressbar mingw-w64-${target}-pkg-config cmake python3 mingw-w64-${target}-cython3
+    - pacman -S --needed --noconfirm --noprogressbar mingw-w64-${target}-pkg-config cmake python mingw-w64-${target}-cython
     - git submodule update --init --recursive
     - wget https://bootstrap.pypa.io/get-pip.py
     - python get-pip.py
     - python --version
+    - cython --version
     - python setup.py build
     - python setup.py test
 
