@@ -49,5 +49,6 @@ install:
 script:
   - swig -version
   - python --version
-  - python setup.py build
-  - python setup.py test
+  - pwd             # REMOVE
+  - ls uniprot_kb   # REMOVE
+  - python setup.py build test
