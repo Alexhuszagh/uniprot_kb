@@ -41,6 +41,8 @@ before_install:
   - if [ "$CXX" = "clang++" ] &&[[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH="/usr/local/opt/llvm/bin:$PATH"  ; fi
   - if [ "$CXX" = "clang++" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install llvm                           ; fi
 
+  - python -m pip python install cython
+
 install:
   - if [ "$CXX" = "g++" ] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CXX="g++-7" CC="gcc-7"; fi
   - if [ "$CXX" = "g++" ] && [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX="g++-6" CC="gcc-6"; fi
@@ -49,6 +51,4 @@ install:
 script:
   - swig -version
   - python --version
-  - pwd             # REMOVE
-  - ls uniprot_kb   # REMOVE
   - python setup.py build test

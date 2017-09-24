@@ -1,7 +1,6 @@
 # Roadmap
 
 **Short-term**
-- Fix Travis CI integrations
 - Write serializers for Uniprot Records
     - XML
     - FASTA
