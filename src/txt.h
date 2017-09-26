@@ -11,6 +11,9 @@
 
 #include <iostream>
 
+
+namespace uniprot
+{
 // FUNCTIONS
 // ---------
 
@@ -18,46 +21,48 @@
 /**
  *  \brief Serialize single UniProt record to tab-delimited text.
  */
-std::string& to_text(std::string& str, const UniProtRecord& record);
+std::string& to_text(std::string& str, const record& r);
 
 
 /**
  *  \brief Serialize UniProt record list to tab-delimited text.
  */
-std::string& to_text(std::string& str, const UniProtRecordList& list);
+std::string& to_text(std::string& str, const record_list& list);
 
 
 /**
  *  \brief Serialize single UniProt record to tab-delimited text.
  */
-std::ostream& to_text(std::ostream& stream, const UniProtRecord& record);
+std::ostream& to_text(std::ostream& stream, const record& r);
 
 
 /**
  *  \brief Serialize UniProt record list to tab-delimited text.
  */
-std::ostream& to_text(std::ostream& stream, const UniProtRecordList& list);
+std::ostream& to_text(std::ostream& stream, const record_list& list);
 
 
 /**
  *  \brief Load tab-delimited text to UniProt record.
  */
-UniProtRecord& load_text(UniProtRecord& record, const std::string& str);
+record& load_text(record& r, const std::string& str);
 
 
 /**
  *  \brief Load tab-delimited text to UniProt record list.
  */
-UniProtRecordList& load_text(UniProtRecordList& list, const std::string& str);
+record_list& load_text(record_list& list, const std::string& str);
 
 
 /**
  *  \brief Load tab-delimited text to UniProt record.
  */
-UniProtRecord& load_text(UniProtRecord& record, std::istream& stream);
+record& load_text(record& r, std::istream& stream);
 
 
 /**
  *  \brief Load tab-delimited text to UniProt record list.
  */
-UniProtRecordList& load_text(UniProtRecordList& list, std::istream& stream);
+record_list& load_text(record_list& list, std::istream& stream);
+
+}   /* uniprot */

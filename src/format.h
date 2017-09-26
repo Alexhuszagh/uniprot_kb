@@ -9,7 +9,7 @@
 
 #include "fwd.h"
 #include "fasta.h"
-//#include "txt.h"
+#include "txt.h"
 //#include "xml.h"
 
 #include <pycpp/stream/fstream.h>
@@ -86,7 +86,7 @@ std::string to_string(const T& t, format fmt)
 {
     std::string str;
     switch (fmt) {
-//        case format_txt:        return to_text(str, t);
+        case format_txt:        return to_text(str, t);
         case format_fasta:      return to_fasta(str, t);
 //        case format_xml:        return to_xml(str, t);
         default:        throw std::runtime_error("Unrecognized option.");
@@ -99,8 +99,8 @@ T from_string(const std::string& str, format fmt)
 {
     T t;
     switch (fmt) {
-//        case format_txt:        return load_text(t, str);
-//        case format_fasta:      return load_fasta(t, str);
+        case format_txt:        return load_text(t, str);
+        case format_fasta:      return load_fasta(t, str);
 //        case format_xml:        return load_xml(t, str);
         default:        throw std::runtime_error("Unrecognized option.");
     }
@@ -112,7 +112,7 @@ void to_file(const T& t, const std::string& path, format fmt)
 {
     ofstream stream(path, std::ios_base::binary);
     switch (fmt) {
-//        case format_txt:        to_text(stream, t);     return;
+        case format_txt:        to_text(stream, t);     return;
         case format_fasta:      to_fasta(stream, t);    return;
 //        case format_xml:        to_xml(stream, t);      return;
         default:        throw std::runtime_error("Unrecognized option.");
@@ -126,8 +126,8 @@ T from_file(const std::string& path, format fmt)
     ifstream stream(path, std::ios_base::binary);
     T t;
     switch (fmt) {
-//        case format_txt:        return load_text(t, stream);
-//        case format_fasta:      return load_fasta(t, stream);
+        case format_txt:        return load_text(t, stream);
+        case format_fasta:      return load_fasta(t, stream);
 //        case format_xml:        return load_xml(t, stream);
         default:        throw std::runtime_error("Unrecognized option.");
     }

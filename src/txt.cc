@@ -1,57 +1,69 @@
 //  :copyright: (c) 2017 Alex Huszagh.
 //  :license: MIT, see LICENSE.md for more details.
 
+#include "format.h"
 #include "txt.h"
 
 #include <sstream>
 
-// CONSTANTS
-// ---------
 
-
-// TODO: remove, deprecated
-//std::string COLUMN_NAMES[] = {
-//    // http://www.uniprot.org/help/uniprotkb_column_names
-//    // Example:
-//    //      http://www.uniprot.org/uniprot/?query=id:P46406
-//    //      &sort=score
-//    //      &format=tab
-//    //      &columns=version(sequence)
-//    "Version (sequence)",       // sequence_version
-//    "Protein existence",        // protein_evidence
-//    "Entry",                    // id
-//    "Entry Name",               // mnemonic
-////    "Status",                   // ??
-//    "Protein names",            // name
-////    "Gene names",               // ??
-//    "Organism",                 // organism
-//    "Length",                   // length
-//
-//};
-
+namespace uniprot
+{
 // FORMATTERS
 // ----------
 
-// TODO: remove, deprecated, moved to `column.cc`
-// TODO: protein_evidence maps numeric codes to string-based
-// identifiers, which demonstrate the evidence of the protein
-// existence
+static std::ostream& write_header(std::ostream& stream)
+{
+    column_formatter formatter;
+    stream << formatter.txt(column_sequence_version) << "\t"
+           << formatter.txt(column_protein_evidence) << "\t"
+           << formatter.txt(column_mass) << "\t"
+           << formatter.txt(column_length) << "\t"
+           << formatter.txt(column_gene) << "\t"
+           << formatter.txt(column_id) << "\t"
+           << formatter.txt(column_mnemonic) << "\t"
+           << formatter.txt(column_name) << "\t"
+           << formatter.txt(column_organism) << "\t"
+           << formatter.txt(column_proteome) << "\t"
+           << formatter.txt(column_sequence) << "\t"
+           << formatter.txt(column_taxonomy) << "\t";
+    return stream;
+}
+
+
+static std::ostream& write_row(std::ostream& stream, const record& r)
+{
+    record_formatter formatter;
+    stream << formatter.txt(r, column_sequence_version) << "\t"
+           << formatter.txt(r, column_protein_evidence) << "\t"
+           << formatter.txt(r, column_mass) << "\t"
+           << formatter.txt(r, column_length) << "\t"
+           << formatter.txt(r, column_gene) << "\t"
+           << formatter.txt(r, column_id) << "\t"
+           << formatter.txt(r, column_mnemonic) << "\t"
+           << formatter.txt(r, column_name) << "\t"
+           << formatter.txt(r, column_organism) << "\t"
+           << formatter.txt(r, column_proteome) << "\t"
+           << formatter.txt(r, column_sequence) << "\t"
+           << formatter.txt(r, column_taxonomy) << "\t";
+    return stream;
+}
 
 // FUNCTIONS
 // ---------
 
 
-std::string& to_text(std::string& str, const UniProtRecord& record)
+std::string& to_text(std::string& str, const record& r)
 {
     std::ostringstream stream;
-    to_text(stream, record);
+    to_text(stream, r);
     str = stream.str();
 
     return str;
 }
 
 
-std::string& to_text(std::string& str, const UniProtRecordList& list)
+std::string& to_text(std::string& str, const record_list& list)
 {
     std::ostringstream stream;
     to_text(stream, list);
@@ -61,45 +73,49 @@ std::string& to_text(std::string& str, const UniProtRecordList& list)
 }
 
 
-std::ostream& to_text(std::ostream& stream, const UniProtRecord& record)
+std::ostream& to_text(std::ostream& stream, const record& r)
 {
-    // TODO: here...
-    // TODO: need to serialize the columns
-    // TODO: need to serialize the data
+    write_header(stream);
+    write_row(stream, r);
     return stream;
 }
 
 
-std::ostream& to_text(std::ostream& stream, const UniProtRecordList& list)
+std::ostream& to_text(std::ostream& stream, const record_list& list)
 {
-    // TODO: here...
+    write_header(stream);
+    for (const auto& r: list) {
+        write_row(stream, *r);    
+    }
     return stream;
 }
 
 
-UniProtRecord& load_text(UniProtRecord& record, const std::string& str)
+record& load_text(record& r, const std::string& str)
 {
     std::istringstream stream(str);
-    return load_text(record, stream);
+    return load_text(r, stream);
 }
 
 
-UniProtRecordList& load_text(UniProtRecordList& list, const std::string& str)
+record_list& load_text(record_list& list, const std::string& str)
 {
     std::istringstream stream(str);
     return load_text(list, stream);
 }
 
 
-UniProtRecord& load_text(UniProtRecord& record, std::istream& stream)
+record& load_text(record& r, std::istream& stream)
 {
     // TODO: here...
-    return record;
+    return r;
 }
 
 
-UniProtRecordList& load_text(UniProtRecordList& list, std::istream& stream)
+record_list& load_text(record_list& list, std::istream& stream)
 {
     // TODO: here...
     return list;
 }
+
+}   /* uniprot */
