@@ -3,6 +3,7 @@
 
 #include "format.h"
 #include "txt.h"
+#include <pycpp/string/whitespace.h>
 
 #include <sstream>
 
@@ -34,18 +35,18 @@ static std::ostream& write_header(std::ostream& stream)
 static std::ostream& write_row(std::ostream& stream, const record& r)
 {
     record_formatter formatter;
-    stream << formatter.txt(r, column_sequence_version) << "\t"
-           << formatter.txt(r, column_protein_evidence) << "\t"
-           << formatter.txt(r, column_mass) << "\t"
-           << formatter.txt(r, column_length) << "\t"
-           << formatter.txt(r, column_gene) << "\t"
-           << formatter.txt(r, column_id) << "\t"
-           << formatter.txt(r, column_mnemonic) << "\t"
-           << formatter.txt(r, column_name) << "\t"
-           << formatter.txt(r, column_organism) << "\t"
-           << formatter.txt(r, column_proteome) << "\t"
-           << formatter.txt(r, column_sequence) << "\t"
-           << formatter.txt(r, column_taxonomy) << "\t";
+    stream << formatter.to_txt(r, column_sequence_version) << "\t"
+           << formatter.to_txt(r, column_protein_evidence) << "\t"
+           << formatter.to_txt(r, column_mass) << "\t"
+           << formatter.to_txt(r, column_length) << "\t"
+           << formatter.to_txt(r, column_gene) << "\t"
+           << formatter.to_txt(r, column_id) << "\t"
+           << formatter.to_txt(r, column_mnemonic) << "\t"
+           << formatter.to_txt(r, column_name) << "\t"
+           << formatter.to_txt(r, column_organism) << "\t"
+           << formatter.to_txt(r, column_proteome) << "\t"
+           << formatter.to_txt(r, column_sequence) << "\t"
+           << formatter.to_txt(r, column_taxonomy) << "\t";
     return stream;
 }
 
@@ -76,6 +77,7 @@ std::string& to_text(std::string& str, const record_list& list)
 std::ostream& to_text(std::ostream& stream, const record& r)
 {
     write_header(stream);
+    stream << NEWLINE;
     write_row(stream, r);
     return stream;
 }
@@ -85,7 +87,8 @@ std::ostream& to_text(std::ostream& stream, const record_list& list)
 {
     write_header(stream);
     for (const auto& r: list) {
-        write_row(stream, *r);    
+        stream << NEWLINE;
+        write_row(stream, *r);
     }
     return stream;
 }

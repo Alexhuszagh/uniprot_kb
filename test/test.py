@@ -75,6 +75,38 @@ class UniProtRecordTest(unittest.TestCase):
 
     def test_to_string(self):
         # TEXT
+        data = self.record.to_string(uniprot_kb.Format.txt).splitlines()
+        self.assertEquals(len(data), 2)
+        columns = data[0].split("\t")
+        values = data[1].split("\t")
+
+        # columns
+        self.assertEquals(columns[0], "Version (sequence)")
+        self.assertEquals(columns[1], "Protein existence")
+        self.assertEquals(columns[2], "Mass")
+        self.assertEquals(columns[3], "Length")
+        self.assertEquals(columns[4], "Gene names  (primary )")
+        self.assertEquals(columns[5], "Entry")
+        self.assertEquals(columns[6], "Entry Name")
+        self.assertEquals(columns[7], "Protein names")
+        self.assertEquals(columns[8], "Organism")
+        self.assertEquals(columns[9], "Proteomes")
+        self.assertEquals(columns[10], "Sequence")
+        self.assertEquals(columns[11], "Organism ID")
+
+        # values
+        self.assertEquals(values[0], "3")
+        self.assertEquals(values[1], "Evidence at protein level")
+        self.assertEquals(values[2], "35,780")
+        self.assertEquals(values[3], "333")
+        self.assertEquals(values[4], "GAPDH")
+        self.assertEquals(values[5], "P46406")
+        self.assertEquals(values[6], "G3P_RABIT")
+        self.assertEquals(values[7], "Glyceraldehyde-3-phosphate dehydrogenase")
+        self.assertEquals(values[8], "Oryctolagus cuniculus")
+        self.assertEquals(values[9], "UP000001811")
+        self.assertEquals(values[10], "MVKVGVNGFGRIGRLVTRAAFNSGKVDVVAINDPFIDLHYMVYMFQYDSTHGKFHGTVKAENGKLVINGKAITIFQERDPANIKWGDAGAEYVVESTGVFTTMEKAGAHLKGGAKRVIISAPSADAPMFVMGVNHEKYDNSLKIVSNASCTTNCLAPLAKVIHDHFGIVEGLMTTVHAITATQKTVDGPSGKLWRDGRGAAQNIIPASTGAAKAVGKVIPELNGKLTGMAFRVPTPNVSVVDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIALNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE")
+        self.assertEquals(values[11], "9986")
 
         # FASTA
         data = self.record.to_string(uniprot_kb.Format.fasta).splitlines()
@@ -87,10 +119,11 @@ class UniProtRecordTest(unittest.TestCase):
         self.assertEquals(data[5], "VDLTCRLEKAAKYDDIKKVVKQASEGPLKGILGYTEDQVVSCDFNSATHSSTFDAGAGIA")
         self.assertEquals(data[6], "LNDHFVKLISWYDNEFGYSNRVVDLMVHMASKE")
 
-#        # XML
-#
+        # XML
+
 #    def test_to_file(self):
 #        # TEXT
+#        # TODO: need to test Q8WZ42
 #
 #        # FASTA
 #        pass
@@ -329,10 +362,18 @@ class UniProtRecordListTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             cpy * []
 
-#    def test_to_string(self):
-#        # TEXT
-#
-#        # FASTA
+    def test_to_string(self):
+        # TEXT
+        data = self.list.to_string(uniprot_kb.Format.txt).splitlines()
+        self.assertEquals(len(data), 3)
+        columns = data[0].split("\t")
+        row1 = data[1].split("\t")
+        row2 = data[2].split("\t")
+        self.assertEquals(columns[5], "Entry")
+        self.assertEquals(row1[5], "P46406")
+        self.assertEquals(row2[5], "P02769")
+
+        # FASTA
         data = self.list.to_string(uniprot_kb.Format.fasta).splitlines()
         self.assertEquals(len(data), 21)
         self.assertEquals(data[0], ">sp|P46406|G3P_RABIT Glyceraldehyde-3-phosphate dehydrogenase OS=Oryctolagus cuniculus GN=GAPDH PE=1 SV=3")

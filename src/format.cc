@@ -15,8 +15,27 @@ namespace uniprot
 
 static constexpr size_t SEQUENCE_LINE_LENGTH = 60;
 
-// FUNCTIONS
-// ---------
+// HELPERS
+// -------
+
+struct us_number_formatter: std::numpunct<char>
+{
+protected:
+    virtual char do_thousands_sep() const;
+    virtual std::string do_grouping() const;
+};
+
+char us_number_formatter::do_thousands_sep() const
+{
+    return ',';
+}
+
+
+std::string us_number_formatter::do_grouping() const
+{
+    return "\03";
+}
+
 
 std::string format_sequence_fasta(const std::string& sequence)
 {
@@ -36,6 +55,35 @@ std::string format_protein_name_fasta(const std::string& name)
     // secondary names are delimited by " (";
     size_t index = name.find(" (");
     return name.substr(0, index);
+}
+
+
+std::string format_protein_evidence_txt(uint8_t e)
+{
+    // the documentation is specified here: http://www.uniprot.org/docs/pe_criteria
+    switch (e) {
+        case 1:
+            return "Evidence at protein level";
+        case 2:
+            return "Evidence at transcript level";
+        case 3:
+            return "Evidence from homology";
+        default:
+            throw std::invalid_argument("Unknown protein evidence: " + std::to_string(e));
+    }
+}
+
+// TODO: need the reverse formatters...
+
+
+std::string format_mass_txt(const double& mass)
+{
+    std::stringstream stream;
+    // UniProt KB uses the US-locale for mass formatting, evidenced
+    // by UniProt ID Q8WZ42.
+    stream.imbue(std::locale(stream.getloc(), new us_number_formatter));
+    stream << mass;
+    return stream.str();
 }
 
 // OBJECTS
@@ -109,20 +157,20 @@ std::string column_formatter::txt(column c)
 
 std::string column_formatter::fasta(column c)
 {
+    // null-op, for compatibility reasons only
     switch (c) {
-        // TODO: how does this work?? They're typically empty
-//        case column_sequence_version:
-//        case column_protein_evidence:
-//        case column_mass:
-//        case column_length:
-//        case column_gene:
-//        case column_id:
-//        case column_mnemonic:
-//        case column_name:
-//        case column_organism:
-//        case column_proteome:
-//        case column_sequence:
-//        case column_taxonomy:
+        case column_sequence_version:
+        case column_protein_evidence:
+        case column_mass:
+        case column_length:
+        case column_gene:
+        case column_id:
+        case column_mnemonic:
+        case column_name:
+        case column_organism:
+        case column_proteome:
+        case column_sequence:
+        case column_taxonomy:
         default:
             throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
@@ -151,32 +199,40 @@ std::string column_formatter::xml(column c)
     }
 }
 
-std::string record_formatter::txt(const record& r, column c)
+std::string record_formatter::to_txt(const record& r, column c)
 {
     switch (c) {
-        // TODO:
-//        case column_sequence_version:
-//        case column_protein_evidence:
-//        case column_mass:
-//        case column_length:
-//        case column_gene:
-//        case column_id:
+        case column_sequence_version:
+            return std::to_string(r.sequence_version);
+        case column_protein_evidence:
+            return format_protein_evidence_txt(r.protein_evidence);
+        case column_mass:
+            return format_mass_txt(r.mass);
+        case column_length:
+            return std::to_string(r.length);
+        case column_gene:
+            return r.gene;
+        case column_id:
+            return r.id;
         case column_mnemonic:
             return r.mnemonic;
-//        case column_name:
-//            TODO: need to consider multiple names
-//        case column_organism:
-//        case column_proteome:
+        case column_name:
+            return r.name;
+        case column_organism:
+            return r.organism;
+        case column_proteome:
+            return r.proteome;
         case column_sequence:
             return r.sequence;
-//        case column_taxonomy:
+        case column_taxonomy:
+            return r.taxonomy;
         default:
             throw std::invalid_argument("Unknown column: " + std::to_string(c));
     }
 }
 
 
-std::string record_formatter::fasta(const record& r, column c)
+std::string record_formatter::to_fasta(const record& r, column c)
 {
     switch (c) {
         case column_sequence_version:
@@ -192,7 +248,7 @@ std::string record_formatter::fasta(const record& r, column c)
         case column_name:
             return format_protein_name_fasta(r.name);
         case column_organism:
-                return r.organism;      // TODO: is this correct?
+                return r.organism;
         case column_sequence:
             return format_sequence_fasta(r.sequence);
         // UNIMPLEMENTED
@@ -206,7 +262,7 @@ std::string record_formatter::fasta(const record& r, column c)
 }
 
 
-std::string record_formatter::xml(const record& r, column c)
+std::string record_formatter::to_xml(const record& r, column c)
 {
     switch (c) {
         // TODO:

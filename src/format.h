@@ -71,9 +71,12 @@ struct column_formatter
  */
 struct record_formatter
 {
-    std::string txt(const record& r, column c);
-    std::string fasta(const record& r, column c);
-    std::string xml(const record& r, column c);
+    std::string to_txt(const record& r, column c);
+    std::string to_fasta(const record& r, column c);
+    std::string to_xml(const record& r, column c);
+//    record& load_txt(record& r, const std::string& str, column c);
+//    record& load_fasta(record& r, const std::string& str, column c);
+//    record& load_xml(record& r, const std::string& str, column c);
 };
 
 

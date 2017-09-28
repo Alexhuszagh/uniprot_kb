@@ -35,14 +35,14 @@ std::string& to_fasta(std::string& str, const record_list& list)
 std::ostream& to_fasta(std::ostream& stream, const record& r)
 {
     record_formatter formatter;
-    stream << ">sp|" << formatter.fasta(r, column_id)
-           << "|"    << formatter.fasta(r, column_mnemonic)
-           << " "    << formatter.fasta(r, column_name)
-           << " OS=" << formatter.fasta(r, column_organism)
-           << " GN=" << formatter.fasta(r, column_gene)
-           << " PE=" << formatter.fasta(r, column_protein_evidence)
-           << " SV=" << formatter.fasta(r, column_sequence_version)
-           << formatter.fasta(r, column_sequence);
+    stream << ">sp|" << formatter.to_fasta(r, column_id)
+           << "|"    << formatter.to_fasta(r, column_mnemonic)
+           << " "    << formatter.to_fasta(r, column_name)
+           << " OS=" << formatter.to_fasta(r, column_organism)
+           << " GN=" << formatter.to_fasta(r, column_gene)
+           << " PE=" << formatter.to_fasta(r, column_protein_evidence)
+           << " SV=" << formatter.to_fasta(r, column_sequence_version)
+           << formatter.to_fasta(r, column_sequence);
 
     return stream;
 }
